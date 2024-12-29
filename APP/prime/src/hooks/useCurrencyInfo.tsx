@@ -1,23 +1,5 @@
-import { useMemo } from 'react';
-import {
-  useQuery
-} from '@tanstack/react-query'
-
-// export const useCurrencyInfo = () => {
-  
-
-  //  const { data } = useReadContract({
-//     contract,
-//     method: {
-//       "type": "function",
-//       "name": "getApprovedCurrency",
-//       "inputs": [],
-//       "outputs": [
-//         { "name": "", "type": "address[10]", "internalType": "address[10]" }
-//       ],
-//       "stateMutability": "view"
-//     }
-//   });
+import { useCallback, useMemo } from 'react';
+import useSWR from 'swr';
 
 
 
@@ -37,18 +19,21 @@ export const useCurrencyInfo = () => {
     "0x6b175474e89094c44da98b954eedeac495271d0f"  // DAI
   ], []);
 
-  const { 
-    data: tokenInfos, 
-    isLoading, 
-    error 
-  } = useQuery({
-    queryKey: ['tokenInfos', tokenAddresses],
-    queryFn: () => Promise.all(
+  const fetchCurrency = useCallback(async () => {
+   const currency = await Promise.all(
       tokenAddresses
         .filter(addr => addr !== '0x0000000000000000000000000000000000000000')
         .map(fetchTokenInfo)
-    ),
-    enabled: tokenAddresses.length > 0
+    )
+    return currency;
+  }, [tokenAddresses]) 
+
+  const { 
+    data: tokenInfos,  error, isLoading } = useSWR("currency", fetchCurrency, {
+    revalidateOnFocus: false,
+  revalidateOnReconnect: true,
+  revalidateIfStale: false,
+  revalidateOnMount: true
   });
 
   const currency = useMemo(() => {
@@ -66,9 +51,8 @@ export const useCurrencyInfo = () => {
   }, [tokenInfos]);
 
   return { 
-    getAllCurrency: () => currency, 
-    currencies: currency, 
+    currency, 
     isLoading, 
-    error 
+    error
   };
 };

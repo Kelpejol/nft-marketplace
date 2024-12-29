@@ -4,7 +4,7 @@ import Button from "@/app/components/Button";
 import { ipfsToHttp } from "@/app/components/Listings";
 import {PuffLoader} from 'react-spinners'
 import Image from "next/image";
-import {useCallback, useEffect, useMemo, useState} from "react"
+import {useCallback, useMemo} from "react"
 import { getContract, NFT } from "thirdweb";
 import useDialog from "@/hooks/useDialog";
 import useBuyModal from "@/hooks/useBuyModal";
@@ -13,6 +13,10 @@ import { anvil } from "thirdweb/chains";
 import { fetchNFT } from "@/app/contracts/getPlatformInfo";
 import { client } from "@/app/client";
 import useSWR from "swr";
+import useOfferModal from "@/hooks/useOfferModal";
+import img1 from "@public/img1.jpeg"
+import EmptyState from "@/app/components/EmptyState";
+
 
 
 interface ListingDetailsProps {
@@ -27,6 +31,12 @@ interface ListingDetailsProps {
 export default function ListingDetails({listingId}: ListingDetailsProps) {
   const dialog = useDialog();
   const buyModal = useBuyModal();
+  const offer = useOfferModal();
+
+  const makeOffer = useCallback(() => {
+     offer.setListingId(BigInt(listingId));
+     offer.onOpen();
+    }, [listingId, offer]) 
 
 
     const fetchListing = useCallback(async () => {
@@ -55,14 +65,15 @@ export default function ListingDetails({listingId}: ListingDetailsProps) {
   const { 
     data, 
     error,
+    isLoading,
     mutate,
   } = useSWR('listing/' + listingId, fetchListing, {
-    revalidateOnFocus: true,
+    revalidateOnFocus: false,
     revalidateOnReconnect: true
     });
 
     const listingStatus=useMemo(() => {
-console.log(data?.status)
+      console.log(data?.status)
       if(data?.status == 1){
         return "Live";
       }
@@ -110,17 +121,17 @@ console.log(data?.status)
   }, [data, buyModal, dialog, mutate]);
 
   
-  if(error) {
-    return <div>An error occured</div>
-  }
+  // if(error) {
+  //   return <div>An error occured</div>
+  // }
 
   if (!data) {
-    return <div>No listing found</div>
+    return <div><EmptyState/></div>
   }
   
   return (
-    <div className="flex flex-col w-full items-center">
-      <div className="relative w-[90%] h-[30vh] xl:h-[80vh] aspect-[3/4] group">
+    <div className="flex flex-col space-y-10 w-full mb-8 items-center">
+      <div className="relative w-[90%] h-[35vh] md:h-[50vh] lg:h-[80vh] aspect-[3/4] group">
         {/* Animated border gradient */}
         <div 
           className="absolute inset-[-1%] z-[-1] rounded-lg opacity-100 duration-200"
@@ -139,14 +150,18 @@ console.log(data?.status)
 
         {/* Main card content */}
         <div className="flex flex-row justify-between h-full">
-          <div className="w-[45%] h-full flex items-center justify-center">
-            <div className="relative w-[80%] h-[70%]"> 
+          <div className="md:w-[45%] w-[40%] h-full flex items-center justify-center">
+            <div className="relative md:w-[80%] w-[90%] md:h-[70%] h-[80%]"> 
               <Image
                 className=""
                 src={
                   ipfsToHttp(data.nft?.metadata.image!)
+                //  img1
                 }
-                alt={data.nft?.metadata.name!}
+                alt={
+                  data.nft?.metadata.name!
+                  // "img1"
+                }
                 quality={90}
                 fill
                 style={{ objectFit: 'contain' }}
@@ -156,47 +171,64 @@ console.log(data?.status)
           </div>
 
        
-          <div className="w-[55%] h-full flex items-center pl-24">
-            <div className="flex flex-col space-y-4">
+          <div className="md:w-[55%] w-[60%] h-full flex items-center lg:pl-24">
+            <div className="flex flex-col space-y-2 md:space-y-6 w-full">
            <div className="flex space-x-2 items-center">
           {data.status === 1 ? (
-      <PuffLoader size={25} color="red"/>
-     ) : (
-    <div className="bg-red-500 w-3 h-3 rounded-full"></div>
-  )}
-  <div className="text-gray-300">{listingStatus}</div>
+      <PuffLoader 
+      color="red"
+      size={window.innerWidth < 768 ? 10 : 20} 
+       /> 
+      ) : ( 
+     <div className="bg-red-500 w-3 h-3 rounded-full"></div>
+  )} 
+  <div className="text-gray-300 md:text-sm text-[9px] lg:text-lg">
+    {listingStatus} 
+    {/* Live */}
+    </div>
 </div>
-            <div className="capitalize text-white text-3xl">{data.nft?.metadata.name}{" "}#{data.tokenId.toString()}</div>
-            <div className="text-gray-300 text-xl">Listed by: {"  "}
-              <span className="text-white text-base">{data.listingCreator}</span>
+            <div className="capitalize text-white text-[10px] md:text-base lg:text-2xl">
+              {/* AZUKI #1 */}
+               {data.nft?.metadata.name}{" "}#{data.tokenId.toString()}
               </div>
-              <div className="text-gray-300 text-lg">Price: {"  "}
-                <span className="text-white text-lg">{data.pricePerToken.toString()}{" "}MATIC</span>
+            <div className="text-gray-300 md:text-sm text-[9px] lg:text-lg">Listed by: {"  "}
+              <span className="text-white text-[7px] md:text-xs break-words">
+                
+                  {/* 0x7A3d81bD8F80b61cF47927498Ee34CeCf81D944f */}
+                {data.listingCreator} 
+                </span>
+              </div>
+              <div className="text-gray-300 md:text-sm text-[9px] lg:text-lg">Price: {"  "}
+                <span className="text-white text-[7px] md:text-xs">
+                  {data.pricePerToken.toString()}{" "}MATIC 
+                    {/* 10 MATIC */}
+                    </span>
                 </div>    
-                {data?.reserved && (
-                  <div className="text-gray-300 text-xl capitalize font-black">Reserved</div>
-                )}
-              <div className="flex space-x-3">
-              <Button actionLabel='Buy listing' size='large' color='primary' action={
+                 {data?.reserved && ( 
+                  <div className="text-gray-300 text-[10px] md:text-base lg:text-2xl capitalize font-black">Reserved</div>
+                 )}
+              <div className="flex lg:space-x-3 space-x-1">
+              <Button actionLabel='Buy listing' size='medium' color='primary' action={
                
                 buyListing} />
-              <Button actionLabel='Make Offer' size='large' color='secondary' />
+              <Button actionLabel='Make Offer' size='medium' color='secondary' action={makeOffer}/>
             </div>
             
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center ">
+              <div className="space-x-4 text-[7px] md:text-xs">
              ⏰
-              <div className="text-gray-300 text-lg">{endTime}{" "}Days left</div>
+             </div>
+              <div className="text-gray-300 text-[7px] md:text-xs">
+                 {endTime}{" "}Days left 
+                {/* 10 Days left */}
+                </div>
             </div>
             </div>
           </div>
         </div>
 
         {/* Existing details section */}
-        <div className="flex flex-col justify-center items-start h-[15%] px-3 py-3 text-[12px]">
-          <div className="flex justify-between items-center w-full">
-            {/* Existing placeholder comments */}
-          </div>
-        </div>
+        
       </div>
 
       <style jsx global>{`
@@ -211,24 +243,35 @@ console.log(data?.status)
           inherits: false;
         }
       `}</style>
-    <div className="h-[100vh] flex justify-center w-full items-center">
-         <div className='border-gray-400 border-2 h-[80vh] w-[90%] rounded-lg'>
+    <div className="lg:h-[100vh] h-[90%] flex justify-center w-full items-center">
+         <div className='lg:border-gray-400 lg:border-2 lg:h-[80vh] h-[90%] w-[90%] rounded-lg'>
           
-          <div className='flex w-full h-full justify-evenly items-center'>
-              <div className="w-[30%] border-gray-400 border-2 h-[80%] rounded-lg p-2">
-                <div className='w-full border-gray-400 border-b-2 text-center text-xl'>Details</div>
+          <div className='lg:flex w-full h-[90%] justify-evenly space-y-6 lg:space-y-1 items-center'>
+              <div className="lg:w-[30%] w-full border-gray-400 border-2 h-[30vh] lg:h-[80%] rounded-lg p-2">
+                <div className='w-full border-gray-400 border-b-2 text-center md:text-base text-sm lg:text-lg font-black'>Details</div>
                 <div className="w-full h-full flex-col items-stretch">
-                  <div className='w-full h-[25%] border-gray-400 border-b-2 '>Asset Contract: <span className='text-sm'>{data?.assetContract}</span></div>
-                  <div className='w-full h-[25%] border-gray-400 border-b-2 '>Asset Id: <span className='text-sm'>#{data?.tokenId.toString()}</span> </div>
-                  <div className='w-full h-[25%] border-gray-400 border-b-2 '>Asset Standard: <span className='text-sm'>{tokenStandard}</span></div>
-                  <div className='w-full h-[25%]'>Royalty: <span className='text-sm'>10%</span></div>
+                  <div className='w-full h-[25%] border-gray-400 border-b-2 md:text-sm text-[9px] lg:text-lg font-black'>Asset Contract:{' '}<span className='text-[7px] md:text-xs break-words'>
+                    {/* 0x7A3d81bD8F80b61cF47927498Ee34CeCf81D944f  */}
+                    {data?.assetContract}
+                    </span></div>
+                  <div className='w-full h-[25%] border-gray-400 border-b-2 md:text-sm text-[9px] lg:text-lg font-black'>Asset Id:{' '}<span className='text-[7px] md:text-xs'>
+                     #{data?.tokenId.toString()} 
+                    {/* #1 */}
+                    </span> </div>
+                  <div className='w-full h-[25%] border-gray-400 border-b-2 md:text-sm text-[9px] lg:text-lg font-black'>Asset Standard:{' '}<span className='text-[7px] md:text-xs'>
+                    {tokenStandard}
+                    {/* ERC-1155 */}
+                    </span></div>
+                  <div className='w-full h-[25%] md:text-sm text-[9px] lg:text-lg font-black'>Royalty:{' '}<span className='text-[7px] md:text-xs'>10%</span></div>
                 </div>
+           </div>
 
-             </div>
-
-             <div className="w-[50%] border-gray-400 border-2 h-[80%] rounded-lg break-words overflow-y-auto p-2">
-                <div className='w-full border-gray-400 border-b-2 text-center text-xl'>Description</div>
+             <div className="lg:w-[50%] w-full border-gray-400 border-2 h-[40vh] lg:h-[80%] rounded-lg break-words overflow-y-auto p-2">
+                <div className='w-full border-gray-400 border-b-2 text-center md:text-base text-sm lg:text-lg font-black'>Description</div>
+                <div className="md:text-base text-xs">
                 {data?.nft?.metadata.description}
+                {/* dencnfddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddgdggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg  g ggggggggggg  */}
+                </div>
                 
              </div>
           </div>
@@ -240,4 +283,3 @@ console.log(data?.status)
 };
 
 
-      

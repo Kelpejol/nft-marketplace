@@ -1,0 +1,12 @@
+"use client";
+
+import { useEffect } from "react";
+import EmptyState from "./components/EmptyState";
+
+interface ErrorPageProps {
+  error: Error;
+}
+export default function Error({ error }: ErrorPageProps) {
+
+  return <EmptyState title="Uh oh" subtitle="Something went wrong" />;
+}

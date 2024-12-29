@@ -7,6 +7,7 @@ import { buyFromListing } from "@/app/contracts/directListing";
 import toast from "react-hot-toast";
 import { showToast } from "../WalletToast";
 import useDialog from '@/hooks/useDialog';
+import Button from '../Button';
 
 
 interface DialogProps{
@@ -94,17 +95,19 @@ export const Dialog = ({
                    <div className="mt-5 sm:flex sm:items-center sm:justify-end">
 
                 
-                  <button
-                    onClick={selectNo}
-                    className="w-full px-4 py-2  mt-2 text-sm font-medium tracking-wide text-gray-700 capitalize transition-colors duration-300 transform border border-gray-200 rounded-md sm:mt-0 sm:w-auto sm:mx-2 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-40"
-                  >
-                    No
-                  </button>
+                  <Button
+                  actionLabel='No'
+                    action={selectNo}
+                    ClassName="w-full px-4 py-2  mt-2 text-sm font-medium tracking-wide text-gray-700 capitalize transition-colors duration-300 transform border border-gray-200 rounded-md sm:mt-0 sm:w-auto sm:mx-2 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800 hover:bg-gray-100 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-40"
+                  />
+                   
 
-                  <button
-                  onClick={selectYes} className="w-full px-4 py-2 mt-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md sm:w-auto sm:mt-0 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40">
-                    Yes
-                  </button>
+                  <Button
+                   actionLabel='Yes'
+                   action={selectYes}
+                  ClassName="w-full px-4 py-2 mt-2 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-blue-600 rounded-md sm:w-auto sm:mt-0 hover:bg-blue-500 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40"
+                  />
+                   
                 
               </div>
               )}

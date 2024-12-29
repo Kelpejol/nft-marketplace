@@ -1,18 +1,18 @@
 "use client";
 
 import Modal from "./Modal";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import useCreateListingModal from "@/hooks/useCreateListingModal";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import Heading from "../Heading";
 import ToggleSwitch from "../ToggleSwitch";
 
-import { useActiveAccount, useReadContract } from "thirdweb/react";
+import { useActiveAccount } from "thirdweb/react";
 import CurrencySelect, { CurrencySelectValue } from "../CurrencySelect";
 import { createListing } from "@/app/contracts/directListing";
 import toast from "react-hot-toast";
 import { showToast } from "../WalletToast";
+import { useCurrencyInfo } from "@/hooks/useCurrencyInfo";
  
 
 enum STEPS {
@@ -30,9 +30,9 @@ enum LISTING_TYPE {
 export default function CreateListingModal() {
   const [selectedType, setSelectedType] = useState<LISTING_TYPE>();
   const [checked, setChecked] = useState(false);
+    const [step, setStep] = useState(STEPS.TYPE);
   const [selectedValue, setSelectedValue] = useState<CurrencySelectValue>();
    const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
   const createListingModal = useCreateListingModal();
   const account = useActiveAccount();
 
@@ -145,15 +145,18 @@ const listingTypeLabel = useCallback(() => {
     
   };
 
+  
 
 
  
 
-  const [step, setStep] = useState(STEPS.TYPE);
+
+
   const onBack = () => {
     setStep((value) => value - 1);
   };
   const onNext = () => {
+   
     setStep((value) => value + 1);
   };
 
@@ -194,31 +197,50 @@ const listingTypeLabel = useCallback(() => {
      title="Choose Listing Plan"
      subtitle="Select the listing plan of your choice"
      />
-   <div className="flex w-[90] justify-between space-x-3">
-      <div onClick={() => handleSelect(LISTING_TYPE.BASIC)} className={`${selectedType == LISTING_TYPE.BASIC && "bg-black text-white "} border-gray-300 border  rounded-lg p-2 cursor-pointer w-[30%]`}>
+   <div className="flex justify-between space-x-3">
+      <div onClick={() => handleSelect(LISTING_TYPE.BASIC)} className={`${selectedType == LISTING_TYPE.BASIC ? "bg-black text-white" : "border-gray-300"} flex-1 cursor-pointer rounded-lg border p-4 text-center`}> 
         <div className="text-center">
-         <div className="text-lg font-bold">Basic</div>
-      <div className={`${selectedType == LISTING_TYPE.BASIC && "text-white"}font-light text-neutral-500 mt-2 text-sm`}>$10</div>
-      <div className={`${selectedType == LISTING_TYPE.BASIC && "text-white"} text-black font-semibold mt-2 text-sm`}>1 month</div>
+         <div className="md:text-lg text-sm font-bold">Basic</div>
+      <div className={`${selectedType == LISTING_TYPE.BASIC && "text-white"} font-light text-neutral-500 mt-2 md:text-sm text-[10px]`}>$10</div>
+      <div className={`${selectedType == LISTING_TYPE.BASIC && "text-white"} text-black font-semibold mt-1 md:text-sm text-[10px]`}>1 month</div>
         </div>
          </div>
- <div onClick={() => handleSelect(LISTING_TYPE.ADVANCED)} className={`${selectedType == LISTING_TYPE.ADVANCED && "bg-black text-white "} border-gray-300 border  rounded-lg p-2 cursor-pointer w-[30%]`}>   
+ <div onClick={() => handleSelect(LISTING_TYPE.ADVANCED)} className={`${selectedType == LISTING_TYPE.ADVANCED ? "bg-black text-white" : "border-gray-300"} flex-1 cursor-pointer rounded-lg border p-4 text-center`}>   
   <div className="text-center">
-         <div className="text-lg font-bold">Advanced</div>
-      <div className={`${selectedType == LISTING_TYPE.ADVANCED && "text-white"}font-light text-neutral-500 mt-2 text-sm`}>$30</div>
-      <div className={`${selectedType == LISTING_TYPE.ADVANCED && "text-white"} text-black font-semibold mt-2 text-sm`}>3 month</div>
+         <div className="md:text-lg text-sm font-bold">Advanced</div>
+      <div className={`${selectedType == LISTING_TYPE.ADVANCED && "text-white"} font-light text-neutral-500 mt-2 md:text-sm text-[10px]`}>$30</div>
+      <div className={`${selectedType == LISTING_TYPE.ADVANCED && "text-white"} text-black font-semibold mt-1 md:text-sm text-[10px]`}>3 month</div>
         </div>  
   
      </div>
- <div onClick={() => handleSelect(LISTING_TYPE.PRO)} className={`${selectedType == LISTING_TYPE.PRO && "bg-black text-white "} border-gray-300 border  rounded-lg p-2 cursor-pointer w-[30%]`}>   
+ <div onClick={() => handleSelect(LISTING_TYPE.PRO)} className={`${selectedType == LISTING_TYPE.PRO ? "bg-black text-white" : "border-gray-300"} flex-1 cursor-pointer rounded-lg border p-4 text-center`}>   
   <div className="text-center">
-         <div className="text-lg font-bold">Pro</div>
-      <div className={`${selectedType == LISTING_TYPE.PRO && "text-white"}font-light text-neutral-500 mt-2 text-sm`}>$50</div>
-      <div className={`${selectedType == LISTING_TYPE.PRO && "text-white"} text-black font-semibold mt-2 text-sm`}>5 month</div>
+         <div className="md:text-lg text-sm font-bold">Pro</div>
+      <div className={`${selectedType == LISTING_TYPE.PRO && "text-white"} font-light text-neutral-500 mt-2 md:text-sm text-[10px]`}>$50</div>
+      <div className={`${selectedType == LISTING_TYPE.PRO && "text-white"} text-black font-semibold mt-1 md:text-sm text-[10px]`}>5 month</div>
         </div>  
   
      </div>
      </div>
+     {/* <div className="flex justify-between space-x-3">
+                  {Object.values(LISTING_TYPE).map((type) => (
+                    <div
+                      key={type}
+                      onClick={() => handleSelect(type)}
+                      className={`flex-1 cursor-pointer rounded-lg border p-4 text-center ${
+                        selectedType === type ? "bg-black text-white" : "border-gray-300"
+                      }`}
+                    >
+                      <div className="font-bold">{type}</div>
+                      <div className="mt-2 text-sm">
+                        ${type === LISTING_TYPE.BASIC ? "10" : type === LISTING_TYPE.ADVANCED ? "30" : "50"}
+                      </div>
+                      <div className="mt-1 text-sm font-semibold">
+                        {type === LISTING_TYPE.BASIC ? "1" : type === LISTING_TYPE.ADVANCED ? "3" : "5"} month
+                      </div>
+                    </div>
+                  ))}
+                </div> */}
     </div>
       
   );
@@ -228,40 +250,37 @@ const listingTypeLabel = useCallback(() => {
   if(step == STEPS.INFO) {
     bodyContent = (
       <div className="flex flex-col  gap-7">
-        <Heading
-        title="Listing Details"
-        subtitle="Enter information about your listing"
-        />
        <div className="flex flex-col gap-4">
-         <div className="flex flex-col gap-2">
-          <label htmlFor="assetContract" className="block sm:text-xs text-[10px] font-black text-black">Asset address</label>
-          <input type="text"  id="assetContract" className={`${errors.assetContract ? "border-red-500" : "border-gray-300"} border-2 rounded-lg p-2 w-full pl-6`} {...register("assetContract", {
+          <label htmlFor="assetContract" className="block text-xs md:text-sm font-medium text-gray-700">
+                      Asset address
+                    </label>
+          <input type="text"  id="assetContract" className={`${errors.assetContract ? "border-red-500" : "border-gray-300"} mt-1 block w-full rounded-md border px-3 py-2 shadow-sm focus:border-black focus:outline-none focus:ring-1 focus:ring-black placeholder:text-[13px]`} {...register("assetContract", {
           required: true
         })} placeholder="0x123...789" />
           
            
-       </div>
-        <div className="flex justify-between">
-        <div className="w-[47%]">
-        <div className="flex flex-col gap-2">
-          <label htmlFor="tokenId" className="block sm:text-xs text-[10px] font-black text-black">Token id</label>
+         <div className="flex gap-4">
+                  <div className="flex-1">
+          <label htmlFor="tokenId" className="block text-xs md:text-sm font-medium text-gray-700">
+                      Token ID
+                    </label>
           <input type="number" id="tokenId"  {...register("tokenId", {
           required: true
-        })} className={`${errors.tokenId ? "border-red-500" : "border-gray-300"} border-2 rounded-lg p-2 w-full placeholder:text-[13px] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`} placeholder="0" />
+        })} className={`${errors.tokenId ? "border-red-500" : "border-gray-300"} mt-1 block w-full rounded-md border px-3 py-2 shadow-sm focus:border-black focus:outline-none focus:ring-1 focus:ring-black placeholder:text-[13px] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`} placeholder="0" />
  
 
        </div>
-       </div>
-           <div className="w-[47%]">
+          
 
-        <div className="flex flex-col gap-2">
-          <label htmlFor="tokenPrice" className="block sm:text-xs text-[10px] font-black text-black">Token price</label>
+        <div className="flex-1">
+          <label htmlFor="tokenPrice" className="block text-xs md:text-sm font-medium text-gray-700">
+                      Token price
+                    </label>
           <input type="number" id="tokenPrice"  {...register("tokenPrice", {
           required: true,
-        })} className={`${errors.tokenPrice ? "border-red-500" : "border-gray-300"} border-2 rounded-lg p-2 w-full placeholder:text-[13px] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`} placeholder="0" />
+        })} className={`${errors.tokenPrice ? "border-red-500" : "border-gray-300"} mt-1 block w-full rounded-md border px-3 py-2 shadow-sm focus:border-black focus:outline-none focus:ring-1 focus:ring-black placeholder:text-[13px] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`} placeholder="0" />
  
-
-       </div>
+      
         
           </div>
           </div>
@@ -275,8 +294,8 @@ const listingTypeLabel = useCallback(() => {
        
         
        
-        <div className="flex justify-between">
-          <div className="text-black font-black block sm:text-xs text-[10px]">Reserve listing?</div>
+        <div className="flex items-center justify-between">
+          <div className="text-sm font-medium text-gray-700">Reserve listing?</div>
           <div className="flex flex-end">
          <ToggleSwitch
          checked={checked}

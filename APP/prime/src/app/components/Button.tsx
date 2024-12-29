@@ -5,10 +5,9 @@ import clsx from 'clsx';
 interface ButtonProps {
   actionLabel: string;
   action?: () => void;
-  size: "small" | "large" | "medium";
-  color: "primary" | "secondary" | "gradient1" | "gradient2" | "magic";
-  outerClassName?: string; 
-  innerClassName?: string; 
+  size?: "small" | "large" | "medium";
+  color?: "primary" | "secondary" | "gradient1" | "gradient2" | "magic";
+ ClassName?: string; 
   disabled?: boolean;
 }
 
@@ -17,8 +16,7 @@ export default function Button({
   action,
   size,
   color,
-  outerClassName, 
-  innerClassName,
+  ClassName, 
   disabled,
 }: ButtonProps) {
   
@@ -37,9 +35,9 @@ export default function Button({
   };
 
   const textClasses = {
-    large: 'px-4',
-    medium: 'px-3',
-    small: 'px-2',
+    large: 'md:text-base text-sm',
+    medium: 'md:text-base text-xs',
+    small: 'md:text-base text-sm px-2',
   };
 
   return (
@@ -48,24 +46,19 @@ export default function Button({
       onClick={action}
       disabled={disabled}
       className={clsx(
-        sizeClasses[size], 
-        colorClasses[color], 
-        'flex items-center justify-center cursor-pointer capitalize text-center',
+        sizeClasses[size!], 
+        colorClasses[color!], 
+         textClasses[size!], 
+        'flex items-center justify-center cursor-pointer capitalize text-center text-sm font-["-apple-system"] sm:text-base',
         disabled && 'opacity-50 disabled:cursor-not-allowed',
-        outerClassName
-      )}
-    >
-      <span
-        className={clsx(
-          textClasses[size], 
-          'text-sm font-["-apple-system"] sm:text-base',
           color === 'primary' && 'text-white', 
           color === "secondary" && "text-black",
-          innerClassName 
-        )}
-      >
+        ClassName
+      )}
+    >
+      
         {actionLabel}
-      </span>
+      
     </button>
     </div>
   );

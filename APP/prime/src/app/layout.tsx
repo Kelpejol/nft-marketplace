@@ -1,19 +1,31 @@
 import type { Metadata } from "next";
 import { Inter} from "next/font/google";
+import localFont from "next/font/local";
+
 import "./globals.css";
 import { ThirdwebProvider } from "thirdweb/react";
 import LandingPageFooter from "./components/landingPage/LandingPageFooter";
 import CreateNftModal from "./components/modals/CreateNftModal";
 import CreateListingModal from "./components/modals/CreateListingModal";
-import {
-  QueryClientProvider,
-} from '@tanstack/react-query'
-import { queryClient } from "./queryClient";
 import WalletToast from "./components/WalletToast";
 import { Dialog } from "./components/modals/Dialog";
 import BuyModal from "./components/modals/BuyModal";
+import OfferModal from "./components/modals/OfferModal";
+import { Suspense } from "react";
 
-const inter = Inter({ subsets: ["latin"] });
+
+// const inter = Inter({ subsets: ["latin"] });
+
+const geistSans = localFont({
+  src: "./fonts/GeistVF.woff",
+  variable: "--font-geist-sans",
+  weight: "100 900",
+});
+const geistMono = localFont({
+  src: "./fonts/GeistMonoVF.woff",
+  variable: "--font-geist-mono",
+  weight: "100 900",
+});
 
 
 export const metadata: Metadata = {
@@ -29,13 +41,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body 
+       className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+           <Suspense>
         <ThirdwebProvider>
-          <QueryClientProvider client={queryClient}>
           {children}
-          </QueryClientProvider>
           <CreateNftModal/>
           <CreateListingModal/>
+          <OfferModal/>
           <Dialog
           content="Who are you buying this art for ? if you 'Click yes'"
           hasButton
@@ -44,6 +57,7 @@ export default function RootLayout({
            <WalletToast/>
           <LandingPageFooter/>
         </ThirdwebProvider>
+        </Suspense>
       </body>
     </html>
   );

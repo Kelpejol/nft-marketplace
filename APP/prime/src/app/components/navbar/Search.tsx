@@ -1,27 +1,19 @@
-"use client";
+import { Search } from "lucide-react";
 
-import { BiSearch } from "react-icons/bi";
-
-export default function Search() {
-
-
-
+export default function SearchInput() {
   return (
-    <div className="relative sm:w-[18rem] w-[9rem] h-full">
-     <input
+    <div className="relative w-full">
+   <input
         type="text"
         placeholder="Search"
-        className="border-gray-300 border-2 sm:w-[18rem] w-[9rem] h-full p-3 pr-12 rounded-2xl focus:outline-none focus:border-rose-500 transition-colors"
-        aria-label="Search"
+        className="w-full h-12 lg:h-14 pl-4 pr-14 rounded-full border-2 shadow-md border-gray-300 focus:outline-none focus:border-rose-500 transition-colors"
       />
       <button
         type="submit"
-        className="absolute top-1/2 right-2 transform -translate-y-1/2 p-1 sm:p-2 bg-rose-500 rounded-full text-white hover:bg-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-400 transition-colors"
-        aria-label="Submit search"
+        className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-rose-500 rounded-full text-white hover:bg-rose-600 transition-colors"
       >
-        <BiSearch size={18} />
+        <Search className="h-4 w-4" />
       </button>
-      </div>
-    
+    </div>
   );
 }

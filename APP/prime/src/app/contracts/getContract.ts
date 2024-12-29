@@ -790,6 +790,301 @@ export const contract = getContract({
       "type": "error",
       "name": "__DirectListing_UnauthorizedToRemoveBuyerForListing",
       "inputs": []
-    }
+    },
+    {
+      "type": "constructor",
+      "inputs": [
+        {
+          "name": "_nativeTokenWrapper",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "_msgData",
+      "inputs": [],
+      "outputs": [{ "name": "", "type": "bytes", "internalType": "bytes" }],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "_msgSender",
+      "inputs": [],
+      "outputs": [
+        { "name": "sender", "type": "address", "internalType": "address" }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "acceptOffer",
+      "inputs": [
+        { "name": "_offerId", "type": "uint256", "internalType": "uint256" },
+        { "name": "_listingId", "type": "uint256", "internalType": "uint256" }
+      ],
+      "outputs": [],
+      "stateMutability": "payable"
+    },
+    {
+      "type": "function",
+      "name": "cancelOffer",
+      "inputs": [
+        { "name": "_offerId", "type": "uint256", "internalType": "uint256" },
+        { "name": "_listingId", "type": "uint256", "internalType": "uint256" }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "getAllOffers",
+      "inputs": [
+        { "name": "_listingId", "type": "uint256", "internalType": "uint256" }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "tuple[]",
+          "internalType": "struct IOffer.Offer[]",
+          "components": [
+            {
+              "name": "totalPrice",
+              "type": "uint256",
+              "internalType": "uint256"
+            },
+            {
+              "name": "expirationTimestamp",
+              "type": "uint256",
+              "internalType": "uint256"
+            },
+            { "name": "offeror", "type": "address", "internalType": "address" },
+            {
+              "name": "listingId",
+              "type": "uint256",
+              "internalType": "uint256"
+            },
+            {
+              "name": "status",
+              "type": "uint8",
+              "internalType": "enum IOffer.Status"
+            }
+          ]
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getOffer",
+      "inputs": [
+        { "name": "_offerId", "type": "uint256", "internalType": "uint256" },
+        { "name": "_listingId", "type": "uint256", "internalType": "uint256" }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "tuple",
+          "internalType": "struct IOffer.Offer",
+          "components": [
+            {
+              "name": "totalPrice",
+              "type": "uint256",
+              "internalType": "uint256"
+            },
+            {
+              "name": "expirationTimestamp",
+              "type": "uint256",
+              "internalType": "uint256"
+            },
+            { "name": "offeror", "type": "address", "internalType": "address" },
+            {
+              "name": "listingId",
+              "type": "uint256",
+              "internalType": "uint256"
+            },
+            {
+              "name": "status",
+              "type": "uint8",
+              "internalType": "enum IOffer.Status"
+            }
+          ]
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "makeOffer",
+      "inputs": [
+        {
+          "name": "_params",
+          "type": "tuple",
+          "internalType": "struct IOffer.OfferParams",
+          "components": [
+            {
+              "name": "totalPrice",
+              "type": "uint256",
+              "internalType": "uint256"
+            },
+            { "name": "duration", "type": "uint128", "internalType": "uint128" }
+          ]
+        },
+        { "name": "_listingId", "type": "uint256", "internalType": "uint256" }
+      ],
+      "outputs": [
+        { "name": "_id", "type": "uint256", "internalType": "uint256" }
+      ],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "rejectOffer",
+      "inputs": [
+        { "name": "_offerId", "type": "uint256", "internalType": "uint256" },
+        { "name": "_listingId", "type": "uint256", "internalType": "uint256" }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "event",
+      "name": "AcceptedOffer",
+      "inputs": [
+        {
+          "name": "offeror",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "totalPrice",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        },
+        {
+          "name": "listingId",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        },
+        {
+          "name": "offerId",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "CancelledOffer",
+      "inputs": [
+        {
+          "name": "offeror",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "offerId",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        },
+        {
+          "name": "listingId",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "NewOffer",
+      "inputs": [
+        {
+          "name": "totalPrice",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        },
+        {
+          "name": "expirationTime",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        },
+        {
+          "name": "listingId",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        },
+        {
+          "name": "sender",
+          "type": "address",
+          "indexed": false,
+          "internalType": "address"
+        },
+        {
+          "name": "offerId",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "RejectedOffer",
+      "inputs": [
+        {
+          "name": "lister",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "offerId",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        },
+        {
+          "name": "listingId",
+          "type": "uint256",
+          "indexed": true,
+          "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "error",
+      "name": "CurrencyTransferLibMismatchedValue",
+      "inputs": [
+        { "name": "expected", "type": "uint256", "internalType": "uint256" },
+        { "name": "actual", "type": "uint256", "internalType": "uint256" }
+      ]
+    },
+    {
+      "type": "error",
+      "name": "__Offer_InsufficientFunds",
+      "inputs": [
+        { "name": "amount", "type": "uint256", "internalType": "uint256" }
+      ]
+    },
+    { "type": "error", "name": "__Offer_InvalidListing", "inputs": [] },
+    { "type": "error", "name": "__Offer_MarketplaceUnapproved", "inputs": [] },
+    { "type": "error", "name": "__Offer_UnauthorizedToCall", "inputs": [] }
   ]
+  
 });

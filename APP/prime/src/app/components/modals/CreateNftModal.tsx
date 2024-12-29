@@ -4,16 +4,13 @@ import Modal from "./Modal";
 import { useCallback, useMemo, useState } from "react";
 import useCreateNftModal from "@/hooks/useCreateNftModal";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import Heading from "../Heading";
 import ToggleSwitch from "../ToggleSwitch";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import createNFT from "@/app/contracts/createNFT";
 import { useActiveAccount } from "thirdweb/react";
-import { Dialog } from "./Dialog";
-import useDialog from "@/hooks/useDialog";
-import WalletToast, { showToast } from "../WalletToast";
+import  { showToast } from "../WalletToast";
 import toast from "react-hot-toast";
 import useCreateListingModal from "@/hooks/useCreateListingModal";
  
@@ -217,14 +214,14 @@ const increment = () => {
      <div className="flex  w-[90] justify-between space-x-3">
       <div onClick={() => handleSelect(NFT_TYPE.SINGLE)} className={`${selectedType == NFT_TYPE.SINGLE ? "border-pink-500 border" : "border-gray-300 border" }  rounded-lg p-2 cursor-pointer`}>
         <div className="text-center">
-         <div className="text-lg font-bold">Single</div>
-      <div className="font-light text-neutral-500 mt-2 text-sm">Choose to create a single unique piece of art</div>
+         <div className="md:text-lg text-sm font-black">Single</div>
+      <div className="font-light text-neutral-500 mt-2 md:text-sm text-xs">Create a single unique piece of art</div>
         </div>
          </div>
 <div onClick={() => handleSelect(NFT_TYPE.MULTIPLE)} className={`${selectedType == NFT_TYPE.MULTIPLE ? "border-pink-500 border" : "border-gray-300 border" }  rounded-lg p-2 cursor-pointer`}>    
   <div className="text-center">
-         <div className="text-lg font-bold">Multiple</div>
-      <div className="font-light text-neutral-500 mt-2 text-sm">Choose to create multiple unique piece of art</div>
+         <div className="md:text-lg text-sm font-black">Multiple</div>
+      <div className="font-light text-neutral-500 mt-2 md:text-sm text-xs">Create multiple unique piece of art</div>
         </div>  
   
      </div>
@@ -237,13 +234,12 @@ const increment = () => {
      bodyContent = (
       <div className="flex flex-col  gap-7">
         <Heading
-        title="Details"
         subtitle="Enter the image of your NFT"
         />
       
 
 
-    <label htmlFor="image" className="flex flex-col items-center relative w-[50%] py-16 px-5 max-w-md mx-auto mt-3 bg-white border-2 border-gray-300 border-dashed cursor-pointer dark:bg-gray-900 dark:border-gray-700 rounded-xl" {...getRootProps()}>
+    <label htmlFor="image" className="flex flex-col items-center relative w-[60%] md:py-16 py-10 px-5 max-w-md mx-auto mt-3 bg-white border-2 border-gray-300 border-dashed cursor-pointer dark:bg-gray-900 dark:border-gray-700 rounded-xl" {...getRootProps()}>
        
  
        
@@ -281,35 +277,58 @@ const increment = () => {
 
   if(step == STEPS.INFO) {
     bodyContent = (
-      <div className="flex flex-col  gap-7">
-        <Heading
-        title="Details"
-        subtitle="Enter information about your NFT"
-        />
+      <div className="flex flex-col gap-4 md:gap-7">
        <div className="flex flex-col gap-4">
-        <div className="flex justify-between">
-        <div className="w-[47%]">
+        {/* <div className="md:flex md:justify-between space-y-4 md:space-y-0">
+        <div className="md:w-[47%] w-full">
         <div className="flex flex-col gap-2">
           <label htmlFor="name" className="block sm:text-xs text-[10px] font-black text-black">Name</label>
           <input type="text" id="name"  {...register("name", {
           required: true,
           maxLength: 25
-        })} className={`${errors.name ? "border-red-500" : "border-gray-300"} border-2  rounded-lg p-2 w-full placeholder:text-[13px]`} placeholder="Enter the name of your NFT" />
+        })} className={`${errors.name ? "border-red-500" : "border-gray-300"} border-2  rounded-lg p-2 w-full placeholder:text-[12px]  md:placeholder:text-[13px]`} placeholder="Enter the name of your NFT" />
  
 
        </div>
        </div>
-           <div className="w-[47%]">
+           <div className="md:w-[47%] w-full">
 
         <div className="flex flex-col gap-2">
           <label htmlFor="symbol" className="block sm:text-xs text-[10px] font-black text-black">Symbol</label>
           <input type="text" id="symbol"  {...register("symbol", {
           required: true,
           maxLength: 5
-        })} className={`${errors.symbol ? "border-red-500" : "border-gray-300"} border-2 rounded-lg p-2 w-full placeholder:text-[13px]`} placeholder="MUN" />
+        })} className={`${errors.symbol ? "border-red-500" : "border-gray-300"} border-2 rounded-lg p-2 w-full placeholder:text-[12px]  md:placeholder:text-[13px]`} placeholder="MUN" />
  
 
        </div>
+        
+          </div>
+          </div> */}
+
+           <div className="flex gap-4">
+                  <div className="flex-1">
+          <label htmlFor="name" className="block text-xs md:text-sm font-medium text-gray-700">
+                      Name
+                    </label>
+           <input type="text" id="name"  {...register("name", {
+          required: true,
+          maxLength: 25
+        })} className={`${errors.name ? "border-red-500" : "border-gray-300"} mt-1 block w-full rounded-md border px-3 py-2 shadow-sm focus:border-black focus:outline-none focus:ring-1 focus:ring-black placeholder:text-[13px]`} placeholder="My NFT" />
+ 
+
+       </div>
+          
+
+        <div className="flex-1">
+          <label htmlFor="symbol" className="block text-xs md:text-sm font-medium text-gray-700">
+                      Symbol</label>
+          <input type="text" id="symbol"  {...register("symbol", {
+          required: true,
+          maxLength: 5
+        })} className={`${errors.symbol ? "border-red-500" : "border-gray-300"} mt-1 block w-full rounded-md border px-3 py-2 shadow-sm focus:border-black focus:outline-none focus:ring-1 focus:ring-black placeholder:text-[13px]`} placeholder="MUN" />
+ 
+      
         
           </div>
           </div>
@@ -317,9 +336,9 @@ const increment = () => {
        
        
         <div className="flex flex-col gap-2">
-    <label htmlFor="description" className="block sm:text-xs text-[10px] font-black text-black">Description{" "} <span className="text-gray-300 font-medium text-sm">(Optional)</span></label>
+ <label htmlFor="description" className="block text-xs md:text-sm font-medium text-gray-700">Description{" "} <span className=" text-xs md:text-sm font-medium text-gray-700">(Optional)</span></label>
 
-    <textarea id="description" placeholder="Tell people about your NFT" className="block font-xs mt-2 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-4 h-26 py-2.5 text-black placeholder:text-[13px]" {...register("description", {
+    <textarea id="description" placeholder="Tell people about your NFT" className="block font-xs mt-1 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-4 h-26 py-2.5 text-black placeholder:text-[12px] md:placeholder:text-[13px]" {...register("description", {
           maxLength: 500
         })}></textarea>
     
@@ -327,20 +346,21 @@ const increment = () => {
 
 </div>
         <div className="flex flex-col gap-2 relative">
-          <label htmlFor="royalties" className="block sm:text-xs text-[10px] font-black text-black">Royalties</label>
-          <input type="number"  min ="0" max = "50" id="royalties" className="border-2 border-gray-300 rounded-lg p-2 w-full pl-6" {...register("royalties", {
+         <label htmlFor="royalties" className="block text-xs md:text-sm font-medium text-gray-700">Royalties</label>
+          <input type="number"  min ="0" max = "50" id="royalties" className="border-2 border-gray-300 rounded-lg mt-1 p-2 w-full pl-6 placeholder:text-[12px] md:placeholder:text-[13px]" {...register("royalties", {
             min: 0,
           max: 50
         })} placeholder="10" />
           <div className="absolute left-2 top-1/2">%</div>
            
        </div>
-        <div className="text-xs text-gray-500"> Suggested: 0%, 10%, 20%, 30%. Maximum is 50%</div>
+        <div className="md:text-xs text-[8px] text-gray-500"> Suggested: 0%, 10%, 20%, 30%. Maximum is 50%</div>
         {selectedType === NFT_TYPE.MULTIPLE && (
-                 <div className="flex justify-between">
-  <span className=" sm:text-xs text-[10px] font-black ">How many would you like to mint?</span>
-  <div className="flex">
- <span onClick={decrement} className=" text-black sm:text-2xl text-xl cursor-pointer">-</span>
+                 <div className="flex justify-between w-full">
+  <span className=" md:text-xs text-[8px] font-black ">How many would you like to mint?</span>
+  <div className="flex w-[40%] justify-between">
+ <span onClick={decrement} className=" text-black md:text-2xl text-lg cursor-pointer w-[5%]">-</span>
+ <div className="">
  <input 
   type="number" 
   id="amountToMint" 
@@ -352,15 +372,16 @@ const increment = () => {
     },
     min: 1
   })}
-  className="border-b border-b-black border-0 focus:border-b focus:border-b-black focus:border-0 focus:outline-none text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+  className="border-b md:text-base w-[90%] text-sm border-b-black border-0 focus:border-b focus:border-b-black focus:border-0 focus:outline-none text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
 />
-  <span onClick={increment} className="text-black sm:text-2xl text-xl cursor-pointer">+</span>
+</div>
+  <span onClick={increment} className="text-black md:text-2xl text-lg cursor-pointer w-[5%]">+</span>
 </div>
 </div>
         )}
 
         <div className="flex justify-between">
-          <div className="text-black font-black block sm:text-xs text-[10px]">Put on marketplace</div>
+          <div className="text-black font-black block md:text-xs text-[10px]">Put on marketplace</div>
           <div className="flex flex-end">
           <ToggleSwitch
          checked={checked}

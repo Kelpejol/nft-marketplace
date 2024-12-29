@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { fetchNFT, listings } from "../contracts/getPlatformInfo";
 import { anvil } from "thirdweb/chains";
 import {  getContract } from "thirdweb";
@@ -8,9 +8,8 @@ import { client } from "../client";
 import Card from "./card/Card";
 import Container from './Container';
 import CardContainer from './card/CardContainer';
-import useBuyModal from '@/hooks/useBuyModal';
 import useSWR from 'swr';
-import useCreateListingModal from '@/hooks/useCreateListingModal';
+import useCreateListingModal from '@/hooks/useCreateListingModal'; 
 
 // Utility function to get contract address
 export function getContractAddress(address: string) {
@@ -34,7 +33,6 @@ export const ipfsToHttp = (ipfsUri: string) => {
 export default function Listings() {
  
   
-  const buyModal = useBuyModal();
   const createListing = useCreateListingModal();
 
   
@@ -51,8 +49,8 @@ export default function Listings() {
           return null;
         }
 
-        const nftCards = await Promise.all(
-          fetchedListings.map(async (listing, index) => {
+        //  await Promise.all(
+         const nftCards = fetchedListings.map(async (listing, index) => {
             try {
               const contract = getContractAddress(listing.assetContract);
               const nftDetails = await fetchNFT(contract, listing);
@@ -66,7 +64,6 @@ export default function Listings() {
                     name={nftDetails!.metadata.name || 'Unnamed NFT'}
                     tokenId={`${listing.tokenId}`}
                     price={`${listing.pricePerToken}`}
-                    click={() => { buyModal.setListingId(listing.listingId) }}
                     listingId={listing.listingId}
                   />
                 );
@@ -75,7 +72,7 @@ export default function Listings() {
               console.log(`Error processing listing ${index}:`, error);
             }
           })
-        );
+        // );
 
         const validCards = nftCards.filter(card => card !== null);
 
@@ -107,18 +104,19 @@ export default function Listings() {
 
 
 
-  if (isLoading) {
-    return <div>Loading listings...</div>;
-  }
-  if (error) {
-    return <div>Error fetching listings</div>;
-  }
+  // if (isLoading) {
+    
+  //   throw new Error("bazinga");
+    
+  // }
+  // if (error) {
+  //   return <div>Error fetching listings</div>;
+  // }
 
   return (
     <Container>
       <CardContainer>
         {fetchedListings?.map(item => item).toReversed()}
-       
       </CardContainer>
     </Container>
   );

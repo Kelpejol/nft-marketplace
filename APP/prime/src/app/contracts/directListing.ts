@@ -47,6 +47,13 @@ export const createListing = async (
     const listingPlanInfoData = await fetchListingPlanInfo(listingType);
     const listingFee = await fetchListingPlanFee(listingPlanInfoData, currency);
 
+    let fee: bigint | undefined;
+    if(currency == NATIVE_TOKEN) {
+      fee = listingFee
+    } else {
+      fee = undefined
+    }
+
    const tokenContract = getContract({
   address: assetContract,
   chain: anvil,
@@ -97,7 +104,7 @@ try {
         listingType,
         reserved
       }],
-      value: listingFee, 
+      value: fee, 
     });
     try {
    

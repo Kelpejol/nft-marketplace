@@ -1,28 +1,38 @@
 'use client'
 import Image from 'next/image';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Button from '../Button';
 import useDialog from '@/hooks/useDialog';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import useOfferModal from '@/hooks/useOfferModal';
+import useBuyModal from '@/hooks/useBuyModal';
+
+
  interface CardProps{
   src: string,
   name: string,
   tokenId: string,
   price: string,
-  click: () => void,
   listingId: bigint
  }
 
-const Card = ({src, name, tokenId, price, click, listingId}: CardProps) => {
+const Card = ({src, name, tokenId, price, listingId}: CardProps) => {
   const [rotation, setRotation] = useState(132);
     const dialog = useDialog();
     const router = useRouter();
-    
-   const buyListing = () => {
-    click();
+    const offer = useOfferModal();
+     const buyModal = useBuyModal();
+
+   const buyListing = useCallback(() => {
+    buyModal.setListingId(listingId) 
     dialog.onOpen();
-  };
+  }, [buyModal, dialog, listingId])
+
+  const makeOffer = useCallback(() => {
+   offer.setListingId(listingId);
+   offer.onOpen();
+  }, [listingId, offer]) 
 
  
 
@@ -63,7 +73,7 @@ const Card = ({src, name, tokenId, price, click, listingId}: CardProps) => {
             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-[15]">
               <div className="flex-col space-y-6">
                 <Button actionLabel='Buy listing' size='small' color='magic' action={buyListing} />
-                <Button actionLabel='Make Offer' size='small' color='magic' 
+                <Button actionLabel='Make Offer' size='small' color='magic' action={makeOffer}
                 />
               </div>
             </div>             

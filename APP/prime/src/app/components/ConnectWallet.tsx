@@ -1,10 +1,10 @@
 "use client"
-import { createThirdwebClient } from "thirdweb";
-import { ConnectButton } from "thirdweb/react";
+import { ConnectButton, useSwitchActiveWalletChain } from "thirdweb/react";
 
 import { createWallet } from "thirdweb/wallets";
 import {useWindowWidth} from '@react-hook/window-size'
 import {client} from "../client"
+import { anvil } from "thirdweb/chains";
 
 interface ConnectWalletProps {
   size: 'primary' | 'secondary' | 'tertiary',
@@ -20,7 +20,7 @@ const wallets = [
 
 export default function ConnectWallet({size, color}: ConnectWalletProps) {
  const width = useWindowWidth();
-
+  const switchChain = useSwitchActiveWalletChain();
   
   const getButtonWidth = (size : string) => {
     if (width >= 1024) {
@@ -132,5 +132,6 @@ export default function ConnectWallet({size, color}: ConnectWalletProps) {
       fontSize: `${size == "tertiary" && "8px"}`
     },
   }}
+   onConnect={(wallet) => switchChain(anvil)}
 />
 )}

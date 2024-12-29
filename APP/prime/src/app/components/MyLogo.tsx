@@ -7,19 +7,19 @@ interface MyLogoProps {
 }
 
 const MyLogo: React.FC<MyLogoProps> = ({ width }) => {
-  const [animate, setAnimate] = useState(false);
+  // const [animate, setAnimate] = useState(false);
 
-  useEffect(() => {
-    const timer = setTimeout(() => setAnimate(true), 500);
-    return () => clearTimeout(timer);
-  }, []);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => setAnimate(true), 500);
+  //   return () => clearTimeout(timer);
+  // }, []);
 
   return (
     <svg
       version="1.0"
       xmlns="http://www.w3.org/2000/svg"
       width={width}
-      height="100%"
+      height={width}
       viewBox="0 0 736.000000 736.000000"
       preserveAspectRatio="xMidYMid meet"
     >

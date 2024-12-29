@@ -8,7 +8,6 @@ import img4 from "@public/img4.jpeg"
 import Button from "../Button"
 import Link from "next/link"
 import useCreateNftModal from "@/hooks/useCreateNftModal"
-import WalletToast from "../WalletToast"
 
 
 

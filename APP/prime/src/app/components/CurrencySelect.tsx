@@ -20,12 +20,8 @@ interface CurrencySelectProps {
 
 
 export default function CurrencySelect({value, onChange}: CurrencySelectProps) {
-  const { isLoading, error, getAllCurrency } = useCurrencyInfo();
+  const { isLoading, error, currency } = useCurrencyInfo();
 
-
-
- 
- 
 
 
   return (
@@ -34,7 +30,7 @@ export default function CurrencySelect({value, onChange}: CurrencySelectProps) {
         placeholder="Currency"
         isClearable
         isLoading={isLoading}
-        options={getAllCurrency()}
+        options={currency}
         value={value}
        onChange={onChange}
         formatOptionLabel={(option) => (

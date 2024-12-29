@@ -17,6 +17,8 @@ import {ReentrancyGuard} from "thirdweb-contract/extension/upgradeable/Reentranc
 
 contract OfferLogic is ERC2771ContextConsumer, IOffer, ReentrancyGuard{
 
+     using SafeERC20 for IERC20;
+
    address private constant NATIVE_TOKEN =
         0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;   
 
@@ -31,7 +33,7 @@ contract OfferLogic is ERC2771ContextConsumer, IOffer, ReentrancyGuard{
 
 
      
-    function makeOffer(OfferParams memory _params, uint256 _listingId) external returns (uint256 _id) {
+    function makeOffer(OfferParams memory _params, uint256 _listingId) external payable returns (uint256 _id) {
          DirectListingsStorage.Data storage data = _getListingStorageData();
          address sender = _msgSender();
          int256 index = data.listingIdToIndex[_listingId];
@@ -40,7 +42,7 @@ contract OfferLogic is ERC2771ContextConsumer, IOffer, ReentrancyGuard{
            if(_listingId <= 0 || _listingId > data.ListingId || listing.status != IDirectListings.Status.CREATED) {
             revert __Offer_InvalidListing();
         }
-         _validateERC20AllowanceAndBalanceOrNativeTokenAmount(listing.currency, _params.totalPrice, sender);
+         _validateERC20AmountAndBalanceOrNativeTokenAmount(listing.currency, _params.totalPrice, sender);
 
           uint256  expirationTime;
           unchecked {
@@ -59,30 +61,31 @@ contract OfferLogic is ERC2771ContextConsumer, IOffer, ReentrancyGuard{
       _id += 1;
      emit NewOffer( _params.totalPrice, expirationTime, _listingId, sender, _id);
      _getOfferStorageData().listingIdToOffer[_listingId][_id] = offer;
-     _getOfferStorageData().listingIdToOfferCount[_listingId] = 1;
+     _getOfferStorageData().listingIdToOfferCount[_listingId] = 1; 
     }
 
-    function _validateERC20AllowanceAndBalanceOrNativeTokenAmount(address _currency, uint256 _tokenPrice,address _buyer) internal {
+    function _validateERC20AmountAndBalanceOrNativeTokenAmount(address _currency, uint256 _tokenPrice,address _buyer) internal {
         if (_currency == NATIVE_TOKEN) {
          if(msg.value < _tokenPrice) {
             revert __Offer_InsufficientFunds(_tokenPrice);
          }
        } else {
-        if(IERC20(_currency).balanceOf(_buyer) < _tokenPrice
-                         ||
-          IERC20(_currency).allowance(_buyer, address(this)) < _tokenPrice) {
+        if(IERC20(_currency).balanceOf(_buyer) < _tokenPrice) {
+        //                  ||
+        //   IERC20(_currency).allowance(_buyer, address(this)) < _tokenPrice
             revert __Offer_InsufficientFunds(_tokenPrice);
         }
+        IERC20(_currency).safeTransferFrom(_buyer, address(this), _tokenPrice);
         
        }
     }
 
-    function cancelOffer(uint256 _offerId, uint256 _listingId) external {
+    function cancelOffer(uint256 _offerId, uint256 _listingId) external payable {
       OfferStorage.Data storage data = _getOfferStorageData();
       DirectListingsStorage.Data storage _data = _getListingStorageData();
          address sender = _msgSender();
          int256 index = _data.listingIdToIndex[_listingId];
-
+          IDirectListings.Listing memory listing = _data.listings[uint256(index)];
           if(_listingId <= 0 || _listingId  > _data.ListingId) {
             revert __Offer_InvalidListing();
         }
@@ -91,11 +94,13 @@ contract OfferLogic is ERC2771ContextConsumer, IOffer, ReentrancyGuard{
             revert __Offer_UnauthorizedToCall();
         }
         emit CancelledOffer( sender,  _offerId, _listingId);
+
+        CurrencyTransferLib.transferCurrencyWithWrapper(listing.currency, address(this), offer.offeror, offer.totalPrice, nativeTokenWrapper);
         data.listingIdToOffer[_listingId][_offerId].status = Status.CANCELLED;     
         
     }
 
-    function rejectOffer(uint256 _offerId, uint256 _listingId) external {
+    function rejectOffer(uint256 _offerId, uint256 _listingId) external payable {
       OfferStorage.Data storage data = _getOfferStorageData();
       DirectListingsStorage.Data storage _data = _getListingStorageData();
          address lister = _msgSender();
@@ -108,7 +113,10 @@ contract OfferLogic is ERC2771ContextConsumer, IOffer, ReentrancyGuard{
         if(lister != listing.listingCreator || offer.status != Status.CREATED) {
             revert __Offer_UnauthorizedToCall();
         }
-        emit RejectedOffer( lister,  _offerId, _listingId);
+         emit RejectedOffer( lister,  _offerId, _listingId);
+
+         CurrencyTransferLib.transferCurrencyWithWrapper(listing.currency, address(this), offer.offeror, offer.totalPrice, nativeTokenWrapper);
+
         data.listingIdToOffer[_listingId][_offerId].status = Status.CANCELLED;     
         
     }
@@ -132,10 +140,10 @@ contract OfferLogic is ERC2771ContextConsumer, IOffer, ReentrancyGuard{
         revert __Offer_MarketplaceUnapproved();
        }
        emit AcceptedOffer(offer.offeror, offer.totalPrice, _listingId, _offerId);
-       data.listingIdToOffer[_listingId][_offerId].status = Status.COMPLETED;
+       data.listingIdToOffer[_listingId][_offerId].status = Status.COMPLETED; 
        _data.listings[uint256(index)].status = IDirectListings.Status.SOLD;
-        _validateERC20AllowanceAndBalanceOrNativeTokenAmount(listing.currency, offer.totalPrice, offer.offeror);
-        _payout(listing.currency, offer.totalPrice, offer.offeror, lister, listing.assetContract, listing.tokenId);
+        // _validateERC20AllowanceAndBalanceOrNativeTokenAmount(listing.currency, offer.totalPrice, offer.offeror);
+        _payout(listing.currency, offer.totalPrice, address(this), lister, listing.assetContract, listing.tokenId);
         _transferListingToken(listing.tokenType, listing.tokenId, listing.listingCreator, listing.assetContract, offer.offeror);
     }
 

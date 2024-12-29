@@ -58,14 +58,14 @@ interface IOffer {
      *
      *  @return offerId The unique integer ID assigned to the offer.
      */
-    function makeOffer(OfferParams memory _params, uint256 _listingId) external returns (uint256 offerId);
+    function makeOffer(OfferParams memory _params, uint256 _listingId) external payable returns (uint256 offerId);
 
     /**
      *  @notice Cancel an offer.
      *
      *  @param _offerId The ID of the offer to cancel.
      */
-    function cancelOffer(uint256 _offerId, uint256 _listingId) external ;
+    function cancelOffer(uint256 _offerId, uint256 _listingId) external payable ;
 
     /**
      *  @notice Accept an offer.
@@ -77,7 +77,7 @@ interface IOffer {
     /// @notice Returns an offer for the given offer ID.
      function getOffer(uint256 _offerId, uint256 _listingId) external view returns (Offer memory);
 
-     function rejectOffer(uint256 _offerId, uint256 _listingId) external ;
+     function rejectOffer(uint256 _offerId, uint256 _listingId) external payable;
 
     /// @notice Returns all active (i.e. non-expired or cancelled) offers.
     function getAllOffers(uint256 _listingId) external view returns (Offer[] memory);
