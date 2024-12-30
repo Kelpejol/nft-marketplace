@@ -28,6 +28,11 @@ enum LISTING_TYPE {
   PRO 
 }
 
+interface LISTING_TYPE_DATA {
+  duration?: string,
+  price?: string
+}
+
 export default function CreateListingModal() {
   const [selectedType, setSelectedType] = useState<LISTING_TYPE>();
   const [checked, setChecked] = useState(false);
@@ -36,6 +41,9 @@ export default function CreateListingModal() {
    const [isLoading, setIsLoading] = useState(false);
   const createListingModal = useCreateListingModal();
   const account = useActiveAccount();
+  const [basicData, setBasicData] = useState<LISTING_TYPE_DATA>({})
+  const [advancedData, setAdvancedData] = useState<LISTING_TYPE_DATA>({})
+  const [proData, setProData] = useState<LISTING_TYPE_DATA>({})
 
 
 
@@ -118,6 +126,28 @@ const listingTypeLabel = useCallback(() => {
 }, [selectedType])
 
 
+useEffect(() => {
+  const fetchListingData = async() => {
+    try{
+const [basicResult, advancedResult, proResult] = await Promise.all([
+   getListingType(LISTING_TYPE.BASIC),
+   getListingType(LISTING_TYPE.ADVANCED),
+   getListingType(LISTING_TYPE.PRO)
+
+]);
+setBasicData({duration: basicResult?.[0].toString(), price: basicResult?.[1].toString()})
+setAdvancedData({duration: advancedResult?.[0].toString(), price: advancedResult?.[1].toString()})
+setProData({duration: basicResult?.[0].toString(), price: basicResult?.[1].toString()})
+
+    } catch (error){
+  console.error('Error fetching listing data:', error)
+    }
+  }
+
+  fetchListingData();
+}, [])
+
+
 
  
   const setCustomValues = useCallback((key: any, value: string | number | File | null | CurrencySelectValue | undefined | boolean) => {
@@ -146,27 +176,27 @@ const listingTypeLabel = useCallback(() => {
     
   };
 
-   const basic = useMemo(async () => {
-    const data = await getListingType(LISTING_TYPE.BASIC);
-    return {
-       duration: data?.[0],
-      price: data?.[1]
-    }
-   }, [])
-   const advanced = useMemo(async () => {
-    const data = await getListingType(LISTING_TYPE.ADVANCED);
-    return {
-      duration: data?.[0],
-      price: data?.[1]
-    }
+  //  const basic = useMemo(async () => {
+  //   const data = await getListingType(LISTING_TYPE.BASIC);
+  //   return {
+  //      duration: data?.[0],
+  //     price: data?.[1]
+  //   }
+  //  }, [])
+  //  const advanced = useMemo(async () => {
+  //   const data = await getListingType(LISTING_TYPE.ADVANCED);
+  //   return {
+  //     duration: data?.[0],
+  //     price: data?.[1]
+  //   }
     
-   }, [])
+  //  }, [])
    
-   const pro = useMemo(async () => {
-    const data = await getListingType(LISTING_TYPE.PRO);
-    return { duration: data?.[0],
-      price: data?.[1]}
-   }, [])
+  //  const pro = useMemo(async () => {
+  //   const data = await getListingType(LISTING_TYPE.PRO);
+  //   return { duration: data?.[0],
+  //     price: data?.[1]}
+  //  }, [])
   
 
 
@@ -223,23 +253,26 @@ const listingTypeLabel = useCallback(() => {
       <div onClick={() => handleSelect(LISTING_TYPE.BASIC)} className={`${selectedType == LISTING_TYPE.BASIC ? "bg-black text-white" : "border-gray-300"} flex-1 cursor-pointer rounded-lg border p-4 text-center`}> 
         <div className="text-center">
          <div className="md:text-lg text-sm font-bold">Basic</div>
-      <div className={`${selectedType == LISTING_TYPE.BASIC && "text-white"} font-light text-neutral-500 mt-2 md:text-sm text-[10px]`}>${basic.then((result) => result.price?.toString())}</div>
-      <div className={`${selectedType == LISTING_TYPE.BASIC && "text-white"} text-black font-semibold mt-1 md:text-sm text-[10px]`}>{basic.then((result) => result.duration?.toString())} month</div>
+      <div className={`${selectedType == LISTING_TYPE.BASIC && "text-white"} font-light text-neutral-500 mt-2 md:text-sm text-[10px]`}>
+        ${basicData.price}</div>
+      <div className={`${selectedType == LISTING_TYPE.BASIC && "text-white"} text-black font-semibold mt-1 md:text-sm text-[10px]`}>
+        {basicData.duration} month</div>
         </div>
          </div>
  <div onClick={() => handleSelect(LISTING_TYPE.ADVANCED)} className={`${selectedType == LISTING_TYPE.ADVANCED ? "bg-black text-white" : "border-gray-300"} flex-1 cursor-pointer rounded-lg border p-4 text-center`}>   
   <div className="text-center">
          <div className="md:text-lg text-sm font-bold">Advanced</div>
-      <div className={`${selectedType == LISTING_TYPE.ADVANCED && "text-white"} font-light text-neutral-500 mt-2 md:text-sm text-[10px]`}>${advanced.then((result) => result.price?.toString())}</div>
-      <div className={`${selectedType == LISTING_TYPE.ADVANCED && "text-white"} text-black font-semibold mt-1 md:text-sm text-[10px]`}>{advanced.then((result) => result.duration?.toString())} month</div>
+      <div className={`${selectedType == LISTING_TYPE.ADVANCED && "text-white"} font-light text-neutral-500 mt-2 md:text-sm text-[10px]`}>
+        ${advancedData.price}</div>
+      <div className={`${selectedType == LISTING_TYPE.ADVANCED && "text-white"} text-black font-semibold mt-1 md:text-sm text-[10px]`}>{advancedData.duration} month</div>
         </div>  
   
      </div>
  <div onClick={() => handleSelect(LISTING_TYPE.PRO)} className={`${selectedType == LISTING_TYPE.PRO ? "bg-black text-white" : "border-gray-300"} flex-1 cursor-pointer rounded-lg border p-4 text-center`}>   
   <div className="text-center">
          <div className="md:text-lg text-sm font-bold">Pro</div>
-      <div className={`${selectedType == LISTING_TYPE.PRO && "text-white"} font-light text-neutral-500 mt-2 md:text-sm text-[10px]`}>${pro.then((result) => result.price?.toString())}</div>
-      <div className={`${selectedType == LISTING_TYPE.PRO && "text-white"} text-black font-semibold mt-1 md:text-sm text-[10px]`}>{pro.then((result) => result.duration?.toString())} month</div>
+      <div className={`${selectedType == LISTING_TYPE.PRO && "text-white"} font-light text-neutral-500 mt-2 md:text-sm text-[10px]`}>${proData.price}</div>
+      <div className={`${selectedType == LISTING_TYPE.PRO && "text-white"} text-black font-semibold mt-1 md:text-sm text-[10px]`}>{proData.duration} month</div>
         </div>  
   
      </div>

@@ -35,8 +35,8 @@ export default function Button({
   };
 
   const textClasses = {
-    large: 'md:text-base text-sm',
-    medium: 'md:text-base text-xs',
+    large: 'md:text-base text-sm px-2',
+    medium: 'md:text-base text-xs px-2',
     small: 'md:text-base text-sm px-2',
   };
 

@@ -28,7 +28,7 @@ export default function EmptyState({
         subtitle={subtitle}
         center
         />
-        <div className="w-48 mt-4">
+        <div className=" flex justify-center w-48 mt-4">
             {showButton && (
                 <Button
                 actionLabel={label!}
