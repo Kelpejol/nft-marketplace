@@ -87,13 +87,13 @@ export default function BuyModal() {
         subtitle="Choose who will receive this art"
       />
       <div className="flex flex-col gap-2 w-full">
-        <label htmlFor="recipientAddress" className="block text-xs sm:text-sm font-bold text-gray-700">
+        <label htmlFor="recipientAddress" className="block text-xs md:text-sm font-medium text-gray-700">
           Recipient address
         </label>
         <input
           type="text"
           id="recipientAddress"
-          className="border-2 border-gray-300 rounded-lg p-2 w-full pl-3 sm:pl-4 text-sm sm:text-base"
+          className=" border-gray-300 p-2 pl-3 sm:pl-4 text-sm sm:text-base mt-1 block w-full rounded-md border px-3 py-2 shadow-sm focus:border-black focus:outline-none focus:ring-1 focus:ring-black placeholder:text-[13px]"
           {...register("recipientAddress", { required: true })}
           placeholder="0x123...789"
         />

@@ -1,7 +1,7 @@
 "use client"
 
 import Button from "@/app/components/Button";
-import { ipfsToHttp } from "@/app/components/Listings";
+import { ipfsToHttp } from "@/app/marketplace/Listings";
 import {PuffLoader} from 'react-spinners'
 import Image from "next/image";
 import {useCallback, useMemo} from "react"
@@ -14,8 +14,11 @@ import { fetchNFT } from "@/app/contracts/getPlatformInfo";
 import { client } from "@/app/client";
 import useSWR from "swr";
 import useOfferModal from "@/hooks/useOfferModal";
+import useCreateListingModal from "@/hooks/useCreateListingModal";
 import img1 from "@public/img1.jpeg"
 import EmptyState from "@/app/components/EmptyState";
+import Error from "@/app/components/Error";
+import {useWindowWidth} from '@react-hook/window-size'
 
 
 
@@ -32,6 +35,20 @@ export default function ListingDetails({listingId}: ListingDetailsProps) {
   const dialog = useDialog();
   const buyModal = useBuyModal();
   const offer = useOfferModal();
+  const createListing = useCreateListingModal();
+
+  const width = useWindowWidth();
+  
+      const size = useMemo(() => {
+          
+           if (width > 768) {
+              return 20
+           }
+          else {
+              return 10
+          }                        
+      }, [width])
+  
 
   const makeOffer = useCallback(() => {
      offer.setListingId(BigInt(listingId));
@@ -121,12 +138,18 @@ export default function ListingDetails({listingId}: ListingDetailsProps) {
   }, [data, buyModal, dialog, mutate]);
 
   
-  // if(error) {
-  //   return <div>An error occured</div>
-  // }
+  if(error) {
+    return <Error error={error}/>
+  }
 
   if (!data) {
-    return <div><EmptyState/></div>
+    return <EmptyState
+            title='Oops!'
+            subtitle="No listing at this moment. Try creating one"
+            showButton={true}
+            onClick={createListing.onOpen}
+            label='Create Listing'
+          />
   }
   
   return (
@@ -177,7 +200,7 @@ export default function ListingDetails({listingId}: ListingDetailsProps) {
           {data.status === 1 ? (
       <PuffLoader 
       color="red"
-      size={window.innerWidth < 768 ? 10 : 20} 
+      size={size} 
        /> 
       ) : ( 
      <div className="bg-red-500 w-3 h-3 rounded-full"></div>

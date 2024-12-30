@@ -12,7 +12,8 @@ import CurrencySelect, { CurrencySelectValue } from "../CurrencySelect";
 import { createListing } from "@/app/contracts/directListing";
 import toast from "react-hot-toast";
 import { showToast } from "../WalletToast";
-import { useCurrencyInfo } from "@/hooks/useCurrencyInfo";
+import {getListingType} from "../../contracts/getPlatformInfo"
+// import { useCurrencyInfo } from "@/hooks/useCurrencyInfo";
  
 
 enum STEPS {
@@ -145,6 +146,27 @@ const listingTypeLabel = useCallback(() => {
     
   };
 
+   const basic = useMemo(async () => {
+    const data = await getListingType(LISTING_TYPE.BASIC);
+    return {
+       duration: data?.[0],
+      price: data?.[1]
+    }
+   }, [])
+   const advanced = useMemo(async () => {
+    const data = await getListingType(LISTING_TYPE.ADVANCED);
+    return {
+      duration: data?.[0],
+      price: data?.[1]
+    }
+    
+   }, [])
+   
+   const pro = useMemo(async () => {
+    const data = await getListingType(LISTING_TYPE.PRO);
+    return { duration: data?.[0],
+      price: data?.[1]}
+   }, [])
   
 
 
@@ -201,23 +223,23 @@ const listingTypeLabel = useCallback(() => {
       <div onClick={() => handleSelect(LISTING_TYPE.BASIC)} className={`${selectedType == LISTING_TYPE.BASIC ? "bg-black text-white" : "border-gray-300"} flex-1 cursor-pointer rounded-lg border p-4 text-center`}> 
         <div className="text-center">
          <div className="md:text-lg text-sm font-bold">Basic</div>
-      <div className={`${selectedType == LISTING_TYPE.BASIC && "text-white"} font-light text-neutral-500 mt-2 md:text-sm text-[10px]`}>$10</div>
-      <div className={`${selectedType == LISTING_TYPE.BASIC && "text-white"} text-black font-semibold mt-1 md:text-sm text-[10px]`}>1 month</div>
+      <div className={`${selectedType == LISTING_TYPE.BASIC && "text-white"} font-light text-neutral-500 mt-2 md:text-sm text-[10px]`}>${basic.then((result) => result.price?.toString())}</div>
+      <div className={`${selectedType == LISTING_TYPE.BASIC && "text-white"} text-black font-semibold mt-1 md:text-sm text-[10px]`}>{basic.then((result) => result.duration?.toString())} month</div>
         </div>
          </div>
  <div onClick={() => handleSelect(LISTING_TYPE.ADVANCED)} className={`${selectedType == LISTING_TYPE.ADVANCED ? "bg-black text-white" : "border-gray-300"} flex-1 cursor-pointer rounded-lg border p-4 text-center`}>   
   <div className="text-center">
          <div className="md:text-lg text-sm font-bold">Advanced</div>
-      <div className={`${selectedType == LISTING_TYPE.ADVANCED && "text-white"} font-light text-neutral-500 mt-2 md:text-sm text-[10px]`}>$30</div>
-      <div className={`${selectedType == LISTING_TYPE.ADVANCED && "text-white"} text-black font-semibold mt-1 md:text-sm text-[10px]`}>3 month</div>
+      <div className={`${selectedType == LISTING_TYPE.ADVANCED && "text-white"} font-light text-neutral-500 mt-2 md:text-sm text-[10px]`}>${advanced.then((result) => result.price?.toString())}</div>
+      <div className={`${selectedType == LISTING_TYPE.ADVANCED && "text-white"} text-black font-semibold mt-1 md:text-sm text-[10px]`}>{advanced.then((result) => result.duration?.toString())} month</div>
         </div>  
   
      </div>
  <div onClick={() => handleSelect(LISTING_TYPE.PRO)} className={`${selectedType == LISTING_TYPE.PRO ? "bg-black text-white" : "border-gray-300"} flex-1 cursor-pointer rounded-lg border p-4 text-center`}>   
   <div className="text-center">
          <div className="md:text-lg text-sm font-bold">Pro</div>
-      <div className={`${selectedType == LISTING_TYPE.PRO && "text-white"} font-light text-neutral-500 mt-2 md:text-sm text-[10px]`}>$50</div>
-      <div className={`${selectedType == LISTING_TYPE.PRO && "text-white"} text-black font-semibold mt-1 md:text-sm text-[10px]`}>5 month</div>
+      <div className={`${selectedType == LISTING_TYPE.PRO && "text-white"} font-light text-neutral-500 mt-2 md:text-sm text-[10px]`}>${pro.then((result) => result.price?.toString())}</div>
+      <div className={`${selectedType == LISTING_TYPE.PRO && "text-white"} text-black font-semibold mt-1 md:text-sm text-[10px]`}>{pro.then((result) => result.duration?.toString())} month</div>
         </div>  
   
      </div>
@@ -295,7 +317,7 @@ const listingTypeLabel = useCallback(() => {
         
        
         <div className="flex items-center justify-between">
-          <div className="text-sm font-medium text-gray-700">Reserve listing?</div>
+          <div className="text-black font-bold block md:text-xs text-[10px]">Reserve listing?</div>
           <div className="flex flex-end">
          <ToggleSwitch
          checked={checked}

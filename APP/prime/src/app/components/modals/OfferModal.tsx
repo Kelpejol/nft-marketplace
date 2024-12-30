@@ -119,7 +119,7 @@ const formattedTimeStamp = (time: DateType, date: DateType) => {
             type="number" 
             id="tokenPrice"  
             {...register("offerAmount", { required: true })} 
-            className={`${errors.offerAmount ? "border-red-500" : "border-gray-300"} border-2 rounded-lg p-2 w-full placeholder:text-[13px] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`} 
+            className={`${errors.offerAmount ? "border-red-500" : "border-gray-300"} p-2 mt-1 block w-full rounded-md border px-3 py-2 shadow-sm focus:border-black focus:outline-none focus:ring-1 focus:ring-black placeholder:text-[13px] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`} 
             placeholder="0" 
           />
         </div>

@@ -8,13 +8,17 @@ import Button from "./Button";
 interface EmptyStateProps {
   title?: string;
   subtitle?: string;
-  showReset?: boolean;
+  showButton?: boolean;
+  onClick?: () => void;
+  label?: string
 }
 
 export default function EmptyState({
   title = "No listing found",
   subtitle = "You haven't created a listing, Try creating one",
-  showReset,
+  showButton,
+  onClick,
+  label
 }: EmptyStateProps) {
   const router = useRouter();
   return (
@@ -24,14 +28,15 @@ export default function EmptyState({
         subtitle={subtitle}
         center
         />
-        {/* <div className="w-48 mt-4">
-            {showReset && (
+        <div className="w-48 mt-4">
+            {showButton && (
                 <Button
-                outline
-                label="Remove all filters"
-                onClick={() => router.push("/")}/>
+                actionLabel={label!}
+                action={() => onClick && onClick()}
+                size="large"
+                color="primary"/>
             )}
-        </div> */}
+        </div>
     </div>
   )
 }

@@ -53,6 +53,19 @@ export const fetchListingPlanInfo = async (
   }
 };
 
+export const getListingType = async(params: number) => {
+  try {
+    const result = await readContract({
+      contract,
+      method: "getListingType",
+      params: [params]
+    });
+    return result
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 export const listings = async () => {
   try {
     console.log("Attempting to fetch listings...");
