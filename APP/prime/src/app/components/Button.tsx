@@ -49,7 +49,7 @@ export default function Button({
         sizeClasses[size!], 
         colorClasses[color!], 
          textClasses[size!], 
-        'flex items-center justify-center cursor-pointer capitalize text-center text-sm font-["-apple-system"] sm:text-base',
+        'flex items-center justify-center cursor-pointer capitalize text-center font-semibold  text-sm sm:text-base',
         disabled && 'opacity-50 disabled:cursor-not-allowed',
           color === 'primary' && 'text-white', 
           color === "secondary" && "text-black",

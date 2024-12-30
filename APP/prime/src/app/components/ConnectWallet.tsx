@@ -106,7 +106,7 @@ export default function ConnectWallet({size, color}: ConnectWalletProps) {
       width: getButtonWidth(size),
       height: getButtonHeight(size),
       background: `${color == 'secondary' ? "white" : color == "primary" ? '#f5f5f5' : 'white'}`,
-      fontWeight: "900",
+      fontWeight: "600",
       fontSize: getFontSize(size),
       padding: `${size == 'tertiary' && "12px 16px"}0 5px`,
       cursor: "pointer",
@@ -115,7 +115,6 @@ export default function ConnectWallet({size, color}: ConnectWalletProps) {
       justifyContent: "center",
       borderRadius: "9px",
       minWidth: "96px",
-      fontFamily: `-apple-system`
     },
   }}
   client={client}
@@ -127,9 +126,14 @@ export default function ConnectWallet({size, color}: ConnectWalletProps) {
   }}
   detailsButton={{
     style: {
-      width: "100%",
-      borderRadius: `${size == 'tertiary' && '0px'}`,
-      fontSize: `${size == "tertiary" && "8px"}`
+      // width: "100%",
+      // borderRadius: `${size == 'tertiary' && '0px'}`,
+      fontSize: getFontSize(size),
+      // `${size == "tertiary" && "8px"}`,
+       borderRadius: "9px",
+        width: getButtonWidth(size),
+      height: getButtonHeight(size),
+      minWidth: "96px",
     },
   }}
    onConnect={(wallet) => switchChain(anvil)}

@@ -53,7 +53,9 @@ const config: Config = {
         }
       },
       fontFamily: {
-        logo: ['Courier New']
+        logo: ['Courier New'],
+        sans: ['var(--font-geist-sans)'],
+        mono: ['var(--font-geist-mono)'],
       },
       boxShadow: {
         neon: '0 0 20px #7928CA, 0 0 40px #FF0080, 0 0 60px #4A148C'

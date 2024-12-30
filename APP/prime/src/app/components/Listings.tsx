@@ -88,7 +88,7 @@ export default function Listings() {
     }
 
     const { data: fetchedListings, error, isLoading, mutate } = useSWR('listings', fetchListings, {
-    revalidateOnFocus: true,
+    revalidateOnFocus: false,
     revalidateOnReconnect: true,
   });
 

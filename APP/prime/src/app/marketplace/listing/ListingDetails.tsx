@@ -248,26 +248,26 @@ export default function ListingDetails({listingId}: ListingDetailsProps) {
           
           <div className='lg:flex w-full h-[90%] justify-evenly space-y-6 lg:space-y-1 items-center'>
               <div className="lg:w-[30%] w-full border-gray-400 border-2 h-[30vh] lg:h-[80%] rounded-lg p-2">
-                <div className='w-full border-gray-400 border-b-2 text-center md:text-base text-sm lg:text-lg font-black'>Details</div>
+                <div className='w-full border-gray-400 border-b-2 text-center md:text-base text-sm lg:text-lg font-bold'>Details</div>
                 <div className="w-full h-full flex-col items-stretch">
-                  <div className='w-full h-[25%] border-gray-400 border-b-2 md:text-sm text-[9px] lg:text-lg font-black'>Asset Contract:{' '}<span className='text-[7px] md:text-xs break-words'>
+                  <div className='w-full h-[25%] border-gray-400 border-b-2 md:text-sm text-[9px] lg:text-lg font-semibold'>Asset Contract:{' '}<span className='text-[7px] md:text-xs break-words'>
                     {/* 0x7A3d81bD8F80b61cF47927498Ee34CeCf81D944f  */}
                     {data?.assetContract}
                     </span></div>
-                  <div className='w-full h-[25%] border-gray-400 border-b-2 md:text-sm text-[9px] lg:text-lg font-black'>Asset Id:{' '}<span className='text-[7px] md:text-xs'>
+                  <div className='w-full h-[25%] border-gray-400 border-b-2 md:text-sm text-[9px] lg:text-lg font-semibold'>Asset Id:{' '}<span className='text-[7px] md:text-xs'>
                      #{data?.tokenId.toString()} 
                     {/* #1 */}
                     </span> </div>
-                  <div className='w-full h-[25%] border-gray-400 border-b-2 md:text-sm text-[9px] lg:text-lg font-black'>Asset Standard:{' '}<span className='text-[7px] md:text-xs'>
+                  <div className='w-full h-[25%] border-gray-400 border-b-2 md:text-sm text-[9px] lg:text-lg font-semibold'>Asset Standard:{' '}<span className='text-[7px] md:text-xs'>
                     {tokenStandard}
                     {/* ERC-1155 */}
                     </span></div>
-                  <div className='w-full h-[25%] md:text-sm text-[9px] lg:text-lg font-black'>Royalty:{' '}<span className='text-[7px] md:text-xs'>10%</span></div>
+                  <div className='w-full h-[25%] md:text-sm text-[9px] lg:text-lg font-semibold'>Royalty:{' '}<span className='text-[7px] md:text-xs'>10%</span></div>
                 </div>
            </div>
 
              <div className="lg:w-[50%] w-full border-gray-400 border-2 h-[40vh] lg:h-[80%] rounded-lg break-words overflow-y-auto p-2">
-                <div className='w-full border-gray-400 border-b-2 text-center md:text-base text-sm lg:text-lg font-black'>Description</div>
+                <div className='w-full border-gray-400 border-b-2 text-center md:text-base text-sm lg:text-lg font-bold'>Description</div>
                 <div className="md:text-base text-xs">
                 {data?.nft?.metadata.description}
                 {/* dencnfddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddgdggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg  g ggggggggggg  */}
