@@ -23,6 +23,17 @@ export default function UserMenu() {
     setIsOpen((value) => !value);
   }, []);
 
+  const openCreateListing = useCallback(() => {
+     createListingModal.onOpen();
+          setIsOpen(false)
+                
+  }, [createListingModal])
+
+  const openNFT = useCallback(() => {
+    createNFTModal.onOpen();
+    setIsOpen(false)
+  }, [createNFTModal])
+
   const notifOpen = useCallback(() => {
     setIsOpen(false);
     setNotifIsOpen((value) => !value);
@@ -32,7 +43,9 @@ export default function UserMenu() {
     <div className="w-full">
       <div className=" mx-auto xl:px-20 md:px-10 sm:px-6 px-2">
         <div className="h-20 flex items-center justify-between gap-2 relative">
-            <Logo />
+            <div className="flex-shrink-0"> {/* Add this wrapper */}
+        <Logo />
+    </div>
             <div className="max-w-2xl ">
               <Search />
             </div>
@@ -65,23 +78,30 @@ export default function UserMenu() {
             <div className="flex flex-col md:py-2">
               <MenuItem
                 label="Create listing"
-                onClick={createListingModal.onOpen}
+                onClick={openCreateListing}
               />
               <MenuItem
                 label="Create auction"
-                onClick={() => router.push("/favorites")}
+                onClick={() => {
+                  setIsOpen(false)
+                }
+                }
               />
               <MenuItem
                 label="Create NFTs"
-                onClick={createNFTModal.onOpen}
+                onClick={openNFT}
               />
               <MenuItem
                 label="My listings"
-                onClick={() => router.push("/reservations")}
+                onClick={() => {
+                  setIsOpen(false)
+                }}
               />
               <MenuItem
                 label="My auctions"
-                onClick={() => router.push("/properties")}
+                onClick={() => {
+                  setIsOpen(false)
+                }}
               />
               <MenuItem
                 label="Offers"
@@ -89,7 +109,7 @@ export default function UserMenu() {
               />
               
               <div className="md:hidden border-t h-full">
-                <ConnectWallet size="tertiary" color="tertiary"/>
+                <ConnectWallet size="tertiary" color="tertiary" onClick={() => {setIsOpen(false)}}/>
               </div>
             </div>
           </div>

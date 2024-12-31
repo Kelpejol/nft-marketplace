@@ -5,10 +5,12 @@ import { createWallet } from "thirdweb/wallets";
 import {useWindowWidth} from '@react-hook/window-size'
 import {client} from "../client"
 import { anvil } from "thirdweb/chains";
+import { useCallback } from "react";
 
 interface ConnectWalletProps {
   size: 'primary' | 'secondary' | 'tertiary',
-  color: 'primary' | 'secondary' | 'tertiary'
+  color: 'primary' | 'secondary' | 'tertiary',
+  onClick?: () => void
 }
 
 const wallets = [
@@ -18,9 +20,14 @@ const wallets = [
   createWallet("app.phantom"),
 ];
 
-export default function ConnectWallet({size, color}: ConnectWalletProps) {
+export default function ConnectWallet({size, color, onClick}: ConnectWalletProps) {
  const width = useWindowWidth();
   const switchChain = useSwitchActiveWalletChain();
+
+  const handleConnect = useCallback(() => {
+   switchChain(anvil);
+   onClick && onClick();
+  }, [onClick, switchChain])
   
   const getButtonWidth = (size : string) => {
     if (width >= 1024) {
@@ -85,17 +92,17 @@ export default function ConnectWallet({size, color}: ConnectWalletProps) {
   const getFontSize = (size: string) => {
     if (width >= 640){
       if(size == "secondary") {
-   return "16px"
+   return "14px"
       } 
       else if (size == "primary") {
-        return "16px"
-      } else {
         return "14px"
+      } else {
+        return "12px"
       }
       
       }
        else {       
-    return "14px"
+    return "12px"
   }                         
   };
   return (
@@ -136,6 +143,6 @@ export default function ConnectWallet({size, color}: ConnectWalletProps) {
       minWidth: "96px",
     },
   }}
-   onConnect={(wallet) => switchChain(anvil)}
+   onConnect={(wallet) => handleConnect}
 />
 )}

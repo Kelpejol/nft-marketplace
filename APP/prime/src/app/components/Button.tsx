@@ -35,7 +35,7 @@ export default function Button({
   };
 
   const textClasses = {
-    large: 'md:text-base text-sm px-2',
+    large: 'md:text-base text-xs px-2',
     medium: 'md:text-base text-xs px-2',
     small: 'md:text-base text-sm px-2',
   };
@@ -49,7 +49,7 @@ export default function Button({
         sizeClasses[size!], 
         colorClasses[color!], 
          textClasses[size!], 
-        'flex items-center justify-center cursor-pointer capitalize text-center font-semibold  text-sm sm:text-base',
+        'flex items-center justify-center cursor-pointer capitalize text-center px-2 font-semibold font-mono text-sm sm:text-base',
         disabled && 'opacity-50 disabled:cursor-not-allowed',
           color === 'primary' && 'text-white', 
           color === "secondary" && "text-black",

@@ -137,20 +137,23 @@ export default function ListingDetails({listingId}: ListingDetailsProps) {
     }
   }, [data, buyModal, dialog, mutate]);
 
+   const imageUrl = useMemo(() => {
+    try {
+      if (data?.nft?.metadata?.image) {
+        return ipfsToHttp(data.nft.metadata.image);
+      }
+      return "";
+    } catch (error) {
+      console.error('Error processing image URL:', error);
+      return "";
+    }
+  }, [data?.nft?.metadata?.image]);
+
   
   if(error) {
     return <Error error={error}/>
   }
 
-  if (!data) {
-    return <EmptyState
-            title='Oops!'
-            subtitle="No listing at this moment. Try creating one"
-            showButton={true}
-            onClick={createListing.onOpen}
-            label='Create Listing'
-          />
-  }
   
   return (
     <div className="flex flex-col space-y-10 w-full mb-8 items-center">
@@ -178,11 +181,11 @@ export default function ListingDetails({listingId}: ListingDetailsProps) {
               <Image
                 className=""
                 src={
-                  ipfsToHttp(data.nft?.metadata.image!)
+                 imageUrl
                 //  img1
                 }
                 alt={
-                  data.nft?.metadata.name!
+                  data?.nft?.metadata.name!
                   // "img1"
                 }
                 quality={90}
@@ -197,7 +200,7 @@ export default function ListingDetails({listingId}: ListingDetailsProps) {
           <div className="md:w-[55%] w-[60%] h-full flex items-center lg:pl-24">
             <div className="flex flex-col space-y-2 md:space-y-6 w-full">
            <div className="flex space-x-2 items-center">
-          {data.status === 1 ? (
+          {data?.status === 1 ? (
       <PuffLoader 
       color="red"
       size={size} 
@@ -212,18 +215,18 @@ export default function ListingDetails({listingId}: ListingDetailsProps) {
 </div>
             <div className="capitalize text-white text-[10px] md:text-base lg:text-2xl">
               {/* AZUKI #1 */}
-               {data.nft?.metadata.name}{" "}#{data.tokenId.toString()}
+               {data?.nft?.metadata.name}{" "}#{data?.tokenId.toString()}
               </div>
             <div className="text-gray-300 md:text-sm text-[9px] lg:text-lg">Listed by: {"  "}
               <span className="text-white text-[7px] md:text-xs break-words">
                 
                   {/* 0x7A3d81bD8F80b61cF47927498Ee34CeCf81D944f */}
-                {data.listingCreator} 
+                {data?.listingCreator} 
                 </span>
               </div>
               <div className="text-gray-300 md:text-sm text-[9px] lg:text-lg">Price: {"  "}
                 <span className="text-white text-[7px] md:text-xs">
-                  {data.pricePerToken.toString()}{" "}MATIC 
+                  {data?.pricePerToken.toString()}{" "}MATIC 
                     {/* 10 MATIC */}
                     </span>
                 </div>    
@@ -290,7 +293,7 @@ export default function ListingDetails({listingId}: ListingDetailsProps) {
            </div>
 
              <div className="lg:w-[50%] w-full border-gray-400 border-2 h-[40vh] lg:h-[80%] rounded-lg break-words overflow-y-auto p-2">
-                <div className='w-full border-gray-400 border-b-2 text-center md:text-base text-sm lg:text-lg font-bold'>Description</div>
+                <div className='w-full border-gray-400 border-b-2 capitalize text-center md:text-base text-sm lg:text-lg font-bold'>Description</div>
                 <div className="md:text-base text-xs">
                 {data?.nft?.metadata.description}
                 {/* dencnfddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddgdggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg  g ggggggggggg  */}

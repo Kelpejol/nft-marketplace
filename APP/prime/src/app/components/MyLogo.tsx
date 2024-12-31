@@ -4,16 +4,18 @@ import React from 'react';
 
 interface MyLogoProps {
   width: string;
+  className?: string; // Add className prop for additional styling
 }
 
-const MyLogo: React.FC<MyLogoProps> = ({ width }) => {
+const MyLogo: React.FC<MyLogoProps> = ({ width, className }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={width}
-      height="auto"
+      height={width} // Set height equal to width to maintain aspect ratio
       viewBox="0 0 736 736"
-      preserveAspectRatio="xMinYMin meet"
+      preserveAspectRatio="xMidYMid meet" // Changed to center alignment
+      className={className}
     >
       <defs>
         <filter id="glow">

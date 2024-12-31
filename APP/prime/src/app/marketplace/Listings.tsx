@@ -89,11 +89,11 @@ export default function Listings() {
     
   }
 
-  if (!fetchedListings?.length) {
+  if (fetchedListings?.length == 0) {
     return (
       <EmptyState
         title='Oops!'
-        subtitle="No listing at this moment. Try creating one"
+        subtitle="No listing at the moment. Try creating one"
         showButton={true}
         onClick={createListing.onOpen}
         label='Create Listing'

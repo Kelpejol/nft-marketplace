@@ -110,7 +110,7 @@ export default function Modal({
   return (
     <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none bg-neutral-800/70 p-4">
       <div className="relative w-full sm:w-4/5 md:w-3/4 lg:w-2/3 xl:w-1/2 max-w-md mx-auto my-6">
-        <div className="translate h-auto max-h-[90vh] lg:h-auto md:h-auto border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+        <div className="translate h-auto border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
           <div className="flex items-center p-4 sm:p-6 rounded-t justify-center relative border-b-[1px]">
             <button
               onClick={handleClose}

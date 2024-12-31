@@ -14,7 +14,8 @@ import toast from "react-hot-toast";
 import { showToast } from "../WalletToast";
 import {getListingType} from "../../contracts/getPlatformInfo"
 // import { useCurrencyInfo } from "@/hooks/useCurrencyInfo";
- 
+ import dayjs from 'dayjs';
+
 
 enum STEPS {
   TYPE = 0,
@@ -29,7 +30,7 @@ enum LISTING_TYPE {
 }
 
 interface LISTING_TYPE_DATA {
-  duration?: string,
+  duration?: number,
   price?: string
 }
 
@@ -125,6 +126,19 @@ const listingTypeLabel = useCallback(() => {
   }
 }, [selectedType])
 
+const TimeHelper = {
+  secondsToMonths: (seconds) => {
+    // Convert seconds to days first
+    const days = seconds / (24 * 60 * 60);
+    // Convert days to months (using 30.44 days per month average)
+    return Math.round(days / 30.44);
+  },
+
+  formatDuration: (months) => {
+    return months === 1 ? '1 month' : `${months} months`;
+  }
+};
+
 
 useEffect(() => {
   const fetchListingData = async() => {
@@ -135,12 +149,23 @@ const [basicResult, advancedResult, proResult] = await Promise.all([
    getListingType(LISTING_TYPE.PRO)
 
 ]);
-setBasicData({duration: basicResult?.[0].toString(), price: basicResult?.[1].toString()})
-setAdvancedData({duration: advancedResult?.[0].toString(), price: advancedResult?.[1].toString()})
-setProData({duration: basicResult?.[0].toString(), price: basicResult?.[1].toString()})
+ setBasicData({
+        duration: TimeHelper.secondsToMonths(basicResult?.[0].toString()),
+        price: basicResult?.[1].toString()
+      });
+      
+      setAdvancedData({
+        duration: TimeHelper.secondsToMonths(advancedResult?.[0].toString()),
+        price: advancedResult?.[1].toString()
+      });
+      
+      setProData({
+        duration: TimeHelper.secondsToMonths(proResult?.[0].toString()),
+        price: proResult?.[1].toString()
+      });
 
-    } catch (error){
-  console.error('Error fetching listing data:', error)
+    } catch (error) {
+      console.error('Error fetching listing data:', error)
     }
   }
 
@@ -256,7 +281,7 @@ setProData({duration: basicResult?.[0].toString(), price: basicResult?.[1].toStr
       <div className={`${selectedType == LISTING_TYPE.BASIC && "text-white"} font-light text-neutral-500 mt-2 md:text-sm text-[10px]`}>
         ${basicData.price}</div>
       <div className={`${selectedType == LISTING_TYPE.BASIC && "text-white"} text-black font-semibold mt-1 md:text-sm text-[10px]`}>
-        {basicData.duration} month</div>
+        {TimeHelper.formatDuration(basicData.duration)}</div>
         </div>
          </div>
  <div onClick={() => handleSelect(LISTING_TYPE.ADVANCED)} className={`${selectedType == LISTING_TYPE.ADVANCED ? "bg-black text-white" : "border-gray-300"} flex-1 cursor-pointer rounded-lg border p-4 text-center`}>   
@@ -264,7 +289,7 @@ setProData({duration: basicResult?.[0].toString(), price: basicResult?.[1].toStr
          <div className="md:text-lg text-sm font-bold">Advanced</div>
       <div className={`${selectedType == LISTING_TYPE.ADVANCED && "text-white"} font-light text-neutral-500 mt-2 md:text-sm text-[10px]`}>
         ${advancedData.price}</div>
-      <div className={`${selectedType == LISTING_TYPE.ADVANCED && "text-white"} text-black font-semibold mt-1 md:text-sm text-[10px]`}>{advancedData.duration} month</div>
+      <div className={`${selectedType == LISTING_TYPE.ADVANCED && "text-white"} text-black font-semibold mt-1 md:text-sm text-[10px]`}>{TimeHelper.formatDuration(advancedData.duration)}</div>
         </div>  
   
      </div>
@@ -272,7 +297,7 @@ setProData({duration: basicResult?.[0].toString(), price: basicResult?.[1].toStr
   <div className="text-center">
          <div className="md:text-lg text-sm font-bold">Pro</div>
       <div className={`${selectedType == LISTING_TYPE.PRO && "text-white"} font-light text-neutral-500 mt-2 md:text-sm text-[10px]`}>${proData.price}</div>
-      <div className={`${selectedType == LISTING_TYPE.PRO && "text-white"} text-black font-semibold mt-1 md:text-sm text-[10px]`}>{proData.duration} month</div>
+      <div className={`${selectedType == LISTING_TYPE.PRO && "text-white"} text-black font-semibold mt-1 md:text-sm text-[10px]`}>{TimeHelper.formatDuration(proData.duration)}</div>
         </div>  
   
      </div>

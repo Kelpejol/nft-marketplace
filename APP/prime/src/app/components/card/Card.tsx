@@ -67,7 +67,7 @@ const Card = ({src, name, tokenId, price, listingId}: CardProps) => {
         />
 
         {/* Main card content */}
-        <div className="relative h-full overflow-hidden rounded-md bg-[#191c29] cursor-pointer">
+        <div className="relative h-full overflow-hidden rounded-sm md:rounded-md bg-[#191c29] cursor-pointer">
           <div className="relative w-full h-full">
             <div className="absolute inset-0 hover:bg-[rgba(0,0,0,0.78)] z-10 transition-colors duration-1000" />
             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-[15]">
@@ -92,10 +92,10 @@ const Card = ({src, name, tokenId, price, listingId}: CardProps) => {
            
             <div className="flex flex-col justify-center items-start h-[15%] px-3 py-3 text-[12px]">
               <div className="flex justify-between items-center w-full">
-                <div className="text-[rgb(88,199,250)] transition-colors duration-1000">{name}</div>
-                <div className="text-[rgb(88,199,250)] transition-colors duration-1000">#{tokenId}</div>
+                <div className="text-[rgb(88,199,250)] transition-colors duration-1000 capitalize md:text-sm text-xs">{name}</div>
+                <div className="text-[rgb(88,199,250)] transition-colors duration-1000 md:text-sm text-xs">#{tokenId}</div>
               </div>
-              <div className="text-[rgb(88,199,250)] transition-colors duration-1000">{price}{"  "}MATIC</div>
+              <div className="text-[rgb(88,199,250)] transition-colors duration-1000 md:text-sm text-xs">{price}{"  "}MATIC</div>
             </div>
           </div>
         </div>

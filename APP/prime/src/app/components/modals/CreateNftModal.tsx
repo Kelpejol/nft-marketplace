@@ -314,7 +314,7 @@ const increment = () => {
            <input type="text" id="name"  {...register("name", {
           required: true,
           maxLength: 25
-        })} className={`${errors.name ? "border-red-500" : "border-gray-300"} mt-1 block w-full rounded-md capitalize border px-3 py-2 shadow-sm focus:border-black focus:outline-none focus:ring-1 focus:ring-black placeholder:text-[13px]`} placeholder="My NFT" />
+        })} className={`${errors.name ? "border-red-500" : "border-gray-300"} mt-1 block w-full rounded-md border px-3 py-2 shadow-sm focus:border-black focus:outline-none focus:ring-1 focus:ring-black placeholder:text-[13px]`} placeholder="My NFT" />
  
 
        </div>
@@ -326,7 +326,7 @@ const increment = () => {
           <input type="text" id="symbol"  {...register("symbol", {
           required: true,
           maxLength: 5
-        })} className={`${errors.symbol ? "border-red-500" : "border-gray-300"} mt-1 block w-full rounded-md border px-3 py-2 shadow-sm focus:border-black focus:outline-none uppercase focus:ring-1 focus:ring-black placeholder:text-[13px]`} placeholder="MUN" />
+        })} className={`${errors.symbol ? "border-red-500" : "border-gray-300"} mt-1 block w-full rounded-md border px-3 py-2 shadow-sm focus:border-black focus:outline-none focus:ring-1 focus:ring-black placeholder:text-[13px]`} placeholder="MUN" />
  
       
         
@@ -338,7 +338,7 @@ const increment = () => {
         <div className="flex flex-col gap-2">
  <label htmlFor="description" className="block text-xs md:text-sm font-medium text-gray-700">Description{" "} <span className=" text-xs md:text-sm font-medium text-gray-700">(Optional)</span></label>
 
-    <textarea id="description" placeholder="Tell people about your NFT" className="block font-xs mt-1 capitalize w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-4 h-26 py-2.5 text-black placeholder:text-[12px] md:placeholder:text-[13px]" {...register("description", {
+    <textarea id="description" placeholder="Tell people about your NFT" className="block font-xs mt-1 w-full placeholder-gray-400/70 dark:placeholder-gray-500 rounded-lg border border-gray-200 bg-white px-4 h-26 py-2.5 text-black placeholder:text-[12px] md:placeholder:text-[13px]" {...register("description", {
           maxLength: 500
         })}></textarea>
     
