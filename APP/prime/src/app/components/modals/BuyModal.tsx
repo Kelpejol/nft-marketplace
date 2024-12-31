@@ -51,6 +51,7 @@ export default function BuyModal() {
       })
 
     } else {
+      buyModal.onClose();
       showToast();
     }
   };

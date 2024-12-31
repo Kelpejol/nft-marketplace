@@ -12,6 +12,7 @@ import useSWR from 'swr';
 import useCreateListingModal from '@/hooks/useCreateListingModal'; 
 import EmptyState from '../components/EmptyState';
 import Error from '../components/Error';
+import SkeletonCardContainer from "../components/card/CardSkeleton"
 
 export function getContractAddress(address: string) {
   return getContract({
@@ -85,8 +86,17 @@ export default function Listings() {
   }, [mutate]);
 
   if(error) {
+    return(
     <Error error={error}/>
+    )
     
+  }
+  if(isLoading) {
+    return(
+      <Container>
+    <SkeletonCardContainer/>
+    </Container>
+    )
   }
 
   if (fetchedListings?.length == 0) {

@@ -127,14 +127,14 @@ const listingTypeLabel = useCallback(() => {
 }, [selectedType])
 
 const TimeHelper = {
-  secondsToMonths: (seconds) => {
+  secondsToMonths: (seconds: any) => {
     // Convert seconds to days first
     const days = seconds / (24 * 60 * 60);
     // Convert days to months (using 30.44 days per month average)
     return Math.round(days / 30.44);
   },
 
-  formatDuration: (months) => {
+  formatDuration: (months: any) => {
     return months === 1 ? '1 month' : `${months} months`;
   }
 };
@@ -150,17 +150,17 @@ const [basicResult, advancedResult, proResult] = await Promise.all([
 
 ]);
  setBasicData({
-        duration: TimeHelper.secondsToMonths(basicResult?.[0].toString()),
+        duration: TimeHelper.secondsToMonths(basicResult?.[0]),
         price: basicResult?.[1].toString()
       });
       
       setAdvancedData({
-        duration: TimeHelper.secondsToMonths(advancedResult?.[0].toString()),
+        duration: TimeHelper.secondsToMonths(advancedResult?.[0]),
         price: advancedResult?.[1].toString()
       });
       
       setProData({
-        duration: TimeHelper.secondsToMonths(proResult?.[0].toString()),
+        duration: TimeHelper.secondsToMonths(proResult?.[0]),
         price: proResult?.[1].toString()
       });
 
@@ -201,27 +201,8 @@ const [basicResult, advancedResult, proResult] = await Promise.all([
     
   };
 
-  //  const basic = useMemo(async () => {
-  //   const data = await getListingType(LISTING_TYPE.BASIC);
-  //   return {
-  //      duration: data?.[0],
-  //     price: data?.[1]
-  //   }
-  //  }, [])
-  //  const advanced = useMemo(async () => {
-  //   const data = await getListingType(LISTING_TYPE.ADVANCED);
-  //   return {
-  //     duration: data?.[0],
-  //     price: data?.[1]
-  //   }
-    
-  //  }, [])
    
-  //  const pro = useMemo(async () => {
-  //   const data = await getListingType(LISTING_TYPE.PRO);
-  //   return { duration: data?.[0],
-  //     price: data?.[1]}
-  //  }, [])
+  
   
 
 
@@ -281,7 +262,7 @@ const [basicResult, advancedResult, proResult] = await Promise.all([
       <div className={`${selectedType == LISTING_TYPE.BASIC && "text-white"} font-light text-neutral-500 mt-2 md:text-sm text-[10px]`}>
         ${basicData.price}</div>
       <div className={`${selectedType == LISTING_TYPE.BASIC && "text-white"} text-black font-semibold mt-1 md:text-sm text-[10px]`}>
-        {TimeHelper.formatDuration(basicData.duration)}</div>
+        {TimeHelper.formatDuration(basicData.duration).toString()}</div>
         </div>
          </div>
  <div onClick={() => handleSelect(LISTING_TYPE.ADVANCED)} className={`${selectedType == LISTING_TYPE.ADVANCED ? "bg-black text-white" : "border-gray-300"} flex-1 cursor-pointer rounded-lg border p-4 text-center`}>   
@@ -289,7 +270,7 @@ const [basicResult, advancedResult, proResult] = await Promise.all([
          <div className="md:text-lg text-sm font-bold">Advanced</div>
       <div className={`${selectedType == LISTING_TYPE.ADVANCED && "text-white"} font-light text-neutral-500 mt-2 md:text-sm text-[10px]`}>
         ${advancedData.price}</div>
-      <div className={`${selectedType == LISTING_TYPE.ADVANCED && "text-white"} text-black font-semibold mt-1 md:text-sm text-[10px]`}>{TimeHelper.formatDuration(advancedData.duration)}</div>
+      <div className={`${selectedType == LISTING_TYPE.ADVANCED && "text-white"} text-black font-semibold mt-1 md:text-sm text-[10px]`}>{TimeHelper.formatDuration(advancedData.duration).toString()}</div>
         </div>  
   
      </div>
@@ -297,30 +278,12 @@ const [basicResult, advancedResult, proResult] = await Promise.all([
   <div className="text-center">
          <div className="md:text-lg text-sm font-bold">Pro</div>
       <div className={`${selectedType == LISTING_TYPE.PRO && "text-white"} font-light text-neutral-500 mt-2 md:text-sm text-[10px]`}>${proData.price}</div>
-      <div className={`${selectedType == LISTING_TYPE.PRO && "text-white"} text-black font-semibold mt-1 md:text-sm text-[10px]`}>{TimeHelper.formatDuration(proData.duration)}</div>
+      <div className={`${selectedType == LISTING_TYPE.PRO && "text-white"} text-black font-semibold mt-1 md:text-sm text-[10px]`}>{TimeHelper.formatDuration(proData.duration).toString()}</div>
         </div>  
   
      </div>
      </div>
-     {/* <div className="flex justify-between space-x-3">
-                  {Object.values(LISTING_TYPE).map((type) => (
-                    <div
-                      key={type}
-                      onClick={() => handleSelect(type)}
-                      className={`flex-1 cursor-pointer rounded-lg border p-4 text-center ${
-                        selectedType === type ? "bg-black text-white" : "border-gray-300"
-                      }`}
-                    >
-                      <div className="font-bold">{type}</div>
-                      <div className="mt-2 text-sm">
-                        ${type === LISTING_TYPE.BASIC ? "10" : type === LISTING_TYPE.ADVANCED ? "30" : "50"}
-                      </div>
-                      <div className="mt-1 text-sm font-semibold">
-                        {type === LISTING_TYPE.BASIC ? "1" : type === LISTING_TYPE.ADVANCED ? "3" : "5"} month
-                      </div>
-                    </div>
-                  ))}
-                </div> */}
+
     </div>
       
   );
