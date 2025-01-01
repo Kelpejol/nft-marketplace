@@ -20,6 +20,7 @@ import EmptyState from "@/app/components/EmptyState";
 import Error from "@/app/components/Error";
 import {useWindowWidth} from '@react-hook/window-size'
 import { fetchTokenInfo } from "@/hooks/useCurrencyInfo";
+import SkeletonListingDetails from "@/app/components/card/ListingSkeletonCard"
 
 
 
@@ -160,6 +161,10 @@ export default function ListingDetails({listingId}: ListingDetailsProps) {
   
   if(error) {
     return <Error error={error}/>
+  }
+
+  if(isLoading) {
+    return <SkeletonListingDetails/>
   }
 
 

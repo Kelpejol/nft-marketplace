@@ -8,8 +8,8 @@ export default function AuctionDetails() {
   const [isExpanded, setIsExpanded] = useState(false)
 
   return (
-    <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-lg p-4 h-[300px] overflow-hidden">
-      <h2 className="text-2xl font-bold text-white mb-2">Auction Details</h2>
+    <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-lg p-4 mt-[20px] md:mt-[0px] md:h-[300px] h-[100px] overflow-y-auto">
+      <h2 className="md:text-2xl text-base font-bold text-white mb-2">Auction Details</h2>
       <motion.div
         initial={{ height: 0 }}
         animate={{ height: isExpanded ? 'auto' : '150px' }}

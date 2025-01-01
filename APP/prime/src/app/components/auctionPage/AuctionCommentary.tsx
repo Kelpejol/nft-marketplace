@@ -27,8 +27,8 @@ export default function AuctionCommentary() {
   }, [])
 
   return (
-    <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-lg p-4 h-[150px] flex flex-col justify-center">
-      <h2 className="text-2xl font-bold text-white mb-2">Auction Commentary</h2>
+    <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-lg p-4 md:h-[150px] h-[100px] flex flex-col justify-center">
+      <h2 className="md:text-2xl text-base font-bold text-white mb-2">Auction Commentary</h2>
       <div className="flex-grow flex items-center justify-center">
         <AnimatePresence mode="wait">
           <motion.p

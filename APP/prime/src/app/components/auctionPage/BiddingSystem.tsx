@@ -26,7 +26,7 @@ export default function BiddingSystem() {
     setBidAmount('')
 
     // Play bid sound
-    const audio = new Audio('/bid-sound.mp3')
+    const audio = new Audio('.mp3')
     audio.play()
   }, [bidAmount, currentBid])
 
@@ -53,11 +53,11 @@ export default function BiddingSystem() {
   }
 
   return (
-    <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-lg p-4 flex flex-col h-[300px]">
-      <h2 className="text-xl font-bold text-white mb-2">Bidding</h2>
+    <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-lg p-4 flex flex-col md:h-[300px] h-[200px]">
+      <h2 className=" text-base md:text-xl font-bold text-white mb-2">Bidding</h2>
       <div className="flex-grow overflow-hidden">
-        <p className="text-base text-white mb-2">Current Bid: ${currentBid}</p>
-        <p className="text-base text-white mb-4">Time Left: {formatTime(timeLeft)}</p>
+        <p className="md:text-base text-sm text-white mb-2">Current Bid: ${currentBid}</p>
+        <p className="md:text-base text-sm text-white mb-4">Time Left: {formatTime(timeLeft)}</p>
         <div className="flex space-x-2 mb-2">
           <input
             type="number"
@@ -73,7 +73,7 @@ export default function BiddingSystem() {
             Bid
           </button>
         </div>
-        <div className="relative h-20 overflow-hidden">
+        <div className="relative md:h-20 h-10 overflow-hidden">
           <AnimatePresence>
             {bids.map((bid) => (
               <motion.div

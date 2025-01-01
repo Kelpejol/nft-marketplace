@@ -32,7 +32,7 @@ export default function LiveChat() {
 
   return (
     <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-lg p-4 flex flex-col h-[300px]">
-      <h2 className="text-2xl font-bold text-white mb-2">Live Chat</h2>
+      <h2 className="md:text-2xl text-base font-bold text-white mb-2">Live Chat</h2>
       <div className="flex-grow overflow-y-auto mb-4 space-y-2">
         {messages.map((msg) => (
           <motion.div
