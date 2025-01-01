@@ -14,6 +14,7 @@ import {  isERC1155, setApprovalForAll } from "thirdweb/extensions/erc1155";
 import { anvil } from "thirdweb/chains";
 import { client } from "../client";
 import { contractAddress, NATIVE_TOKEN } from "./constant";
+import { toEther } from "thirdweb/utils";
 
 
 export enum ListingType {
@@ -92,6 +93,9 @@ try {
   }
 }
 
+const priceInEther = toEther(pricePerToken);
+const formattedPrice = BigInt(priceInEther);
+
     
     const transaction = prepareContractCall({
       contract,
@@ -100,7 +104,7 @@ try {
         assetContract,
         tokenId,
         currency,
-        pricePerToken,
+        pricePerToken: formattedPrice,
         listingType,
         reserved
       }],

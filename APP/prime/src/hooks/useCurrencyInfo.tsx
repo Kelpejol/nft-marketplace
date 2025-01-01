@@ -3,7 +3,7 @@ import useSWR from 'swr';
 
 
 
-const fetchTokenInfo = async (contractAddress: string) => {
+export const fetchTokenInfo = async (contractAddress: string) => {
   const response = await fetch(`https://api.coingecko.com/api/v3/coins/ethereum/contract/${contractAddress}`);
   
   if (!response.ok) {

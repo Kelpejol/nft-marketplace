@@ -112,6 +112,7 @@ const {
     setIsLoading(false);
    })
   } else {
+    createListingModal.onClose();
   showToast()
   }
  

@@ -95,6 +95,7 @@ const {
    
   }
   else {
+    nftModal.onClose();
   showToast()
   }
  

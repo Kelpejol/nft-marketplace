@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import useOfferModal from '@/hooks/useOfferModal';
 import useBuyModal from '@/hooks/useBuyModal';
+import { fetchTokenInfo } from '@/hooks/useCurrencyInfo';
+import useSWR from 'swr';
 
 
  interface CardProps{
@@ -14,10 +16,11 @@ import useBuyModal from '@/hooks/useBuyModal';
   name: string,
   tokenId: string,
   price: string,
-  listingId: bigint
+  listingId: bigint,
+  symbol: string
  }
 
-const Card = ({src, name, tokenId, price, listingId}: CardProps) => {
+const Card = ({src, name, tokenId, price, listingId, symbol}: CardProps) => {
   const [rotation, setRotation] = useState(132);
     const dialog = useDialog();
     const router = useRouter();
@@ -92,10 +95,10 @@ const Card = ({src, name, tokenId, price, listingId}: CardProps) => {
            
             <div className="flex flex-col justify-center items-start h-[15%] px-3 py-3 text-[12px]">
               <div className="flex justify-between items-center w-full">
-                <div className="text-[rgb(88,199,250)] transition-colors duration-1000 capitalize md:text-sm text-xs">{name}</div>
+                <div className="text-[rgb(88,199,250)] transition-colors duration-1000 capitalize md:text-sm text-xs truncate">{name}</div>
                 <div className="text-[rgb(88,199,250)] transition-colors duration-1000 md:text-sm text-xs">#{tokenId}</div>
               </div>
-              <div className="text-[rgb(88,199,250)] transition-colors duration-1000 md:text-sm text-xs">{price}{"  "}MATIC</div>
+              <div className="text-[rgb(88,199,250)] transition-colors duration-1000 md:text-sm text-xs truncate">{price}<span className='space-x-1'>{symbol}</span></div>
             </div>
           </div>
         </div>

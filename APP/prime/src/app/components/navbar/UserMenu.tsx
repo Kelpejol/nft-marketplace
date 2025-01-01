@@ -10,6 +10,8 @@ import useCreateListingModal from "@/hooks/useCreateListingModal";
 import Notification from "../Notifications";
 import Search from "./Search";
 import Logo from "../Logo";
+import Link from 'next/link'
+
 
 export default function UserMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,8 +45,10 @@ export default function UserMenu() {
     <div className="w-full">
       <div className=" mx-auto xl:px-20 md:px-10 sm:px-6 px-2">
         <div className="h-20 flex items-center justify-between gap-2 relative">
-            <div className="flex-shrink-0"> {/* Add this wrapper */}
+            <div className="flex-shrink-0 cursor-pointer"> {/* Add this wrapper */}
+       <Link href="/">
         <Logo />
+        </Link>
     </div>
             <div className="max-w-2xl ">
               <Search />

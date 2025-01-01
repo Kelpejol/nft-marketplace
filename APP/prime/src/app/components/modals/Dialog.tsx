@@ -50,6 +50,7 @@ export const Dialog = ({
   })
   
 } else {
+   dialog.onClose();
   showToast();
 }
 };

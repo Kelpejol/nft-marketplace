@@ -8,27 +8,6 @@ import {FieldValues} from "react-hook-form";
 import { NFT_TYPE } from "../components/modals/CreateNftModal";
 
 
-// const dynamicMintTo = async (nftType: NFT_TYPE) => {
-//   try {
-//     switch(nftType) {
-//       case NFT_TYPE.SINGLE:
-//         const { mintTo: mintToERC721 } = await import("thirdweb/extensions/erc721");
-//         return mintToERC721;
-      
-//       case NFT_TYPE.MULTIPLE:
-//         const { mintTo: mintToERC1155 } = await import("thirdweb/extensions/erc1155");
-//         return mintToERC1155;
-      
-//       default:
-//         throw new Error('Invalid NFT type');
-//     }
-//   } catch (error) {
-//     console.error('Error dynamically importing mint function:', error);
-//     throw error;
-//   }
-// }
-
-
 
 
 

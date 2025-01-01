@@ -21,7 +21,12 @@ export default function LandingPageNavbar() {
         } z-30 px-4 py-2 transition-all duration-300 ease-in-out`}
       >
       <div className="flex justify-between items-center">
+        <div className="cursor-pointer">
+          <Link href="/">
         <Logo />
+        </Link>
+        </div>
+
         <div className="flex gap-6 items-center">
           <ConnectWallet size="secondary" color="secondary"/>
           <Link href="/marketplace">

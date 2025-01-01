@@ -10,7 +10,7 @@ import { showToast } from "../WalletToast";
 import useOfferModal from "@/hooks/useOfferModal";
 import SwitchablePicker, { PickerType } from "../SwitchablePicker";
 import dayjs from 'dayjs';
-import { makeOffer } from "@/app/contracts/makeOffer";
+import { makeOffer } from "@/app/contracts/offers";
 
 
 
@@ -84,6 +84,7 @@ const formattedTimeStamp = (time: DateType, date: DateType) => {
         
       })
     } else {
+       offerModal.onClose();
       showToast();
     }
     

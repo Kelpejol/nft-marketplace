@@ -19,6 +19,7 @@ import img1 from "@public/img1.jpeg"
 import EmptyState from "@/app/components/EmptyState";
 import Error from "@/app/components/Error";
 import {useWindowWidth} from '@react-hook/window-size'
+import { fetchTokenInfo } from "@/hooks/useCurrencyInfo";
 
 
 
@@ -67,11 +68,14 @@ export default function ListingDetails({listingId}: ListingDetailsProps) {
       });
 
       const nft = await fetchNFT(contract, listing);
-
+       const currency = await fetchTokenInfo(listing.currency);
+    
       return {
         ...listing, 
-        nft: nft || null
+        nft: nft || null,
+        currencySymbol: currency.symbol
       };
+    
     } catch(error) {
       console.error('Error fetching listing:', error);
       throw error;
@@ -119,7 +123,11 @@ export default function ListingDetails({listingId}: ListingDetailsProps) {
   // Memoized computations
   const endTime = useMemo(() => {
     if (data?.endTimestamp && data?.startTimestamp) {
-      return Math.floor(Number(data.endTimestamp - data.startTimestamp)) / 86400;
+      const remainingDays = Math.floor(Number(data.endTimestamp - data.startTimestamp)) / 86400;
+      if(remainingDays > 1) {
+        return `${remainingDays} Days left`
+      }
+     return '1 Day left'
     }
     return null;
   }, [data?.endTimestamp, data?.startTimestamp]);
@@ -154,7 +162,9 @@ export default function ListingDetails({listingId}: ListingDetailsProps) {
     return <Error error={error}/>
   }
 
-  
+
+  if(data) {
+   
   return (
     <div className="flex flex-col space-y-10 w-full mb-8 items-center">
       <div className="relative w-[90%] h-[35vh] md:h-[50vh] lg:h-[80vh] aspect-[3/4] group">
@@ -181,11 +191,11 @@ export default function ListingDetails({listingId}: ListingDetailsProps) {
               <Image
                 className=""
                 src={
-                 imageUrl
+               imageUrl
                 //  img1
                 }
                 alt={
-                  data?.nft?.metadata.name!
+                  data.nft?.metadata.name!
                   // "img1"
                 }
                 quality={90}
@@ -200,7 +210,7 @@ export default function ListingDetails({listingId}: ListingDetailsProps) {
           <div className="md:w-[55%] w-[60%] h-full flex items-center lg:pl-24">
             <div className="flex flex-col space-y-2 md:space-y-6 w-full">
            <div className="flex space-x-2 items-center">
-          {data?.status === 1 ? (
+          {data.status === 1 ? (
       <PuffLoader 
       color="red"
       size={size} 
@@ -213,24 +223,24 @@ export default function ListingDetails({listingId}: ListingDetailsProps) {
     {/* Live */}
     </div>
 </div>
-            <div className="capitalize text-white text-[10px] md:text-base lg:text-2xl">
+            <div className="capitalize text-white text-[10px] md:text-base lg:text-2xl truncate">
               {/* AZUKI #1 */}
-               {data?.nft?.metadata.name}{" "}#{data?.tokenId.toString()}
+               {data.nft?.metadata.name}{" "}#{data.tokenId.toString()}
               </div>
             <div className="text-gray-300 md:text-sm text-[9px] lg:text-lg">Listed by: {"  "}
               <span className="text-white text-[7px] md:text-xs break-words">
                 
                   {/* 0x7A3d81bD8F80b61cF47927498Ee34CeCf81D944f */}
-                {data?.listingCreator} 
+                {data.listingCreator} 
                 </span>
               </div>
-              <div className="text-gray-300 md:text-sm text-[9px] lg:text-lg">Price: {"  "}
-                <span className="text-white text-[7px] md:text-xs">
-                  {data?.pricePerToken.toString()}{" "}MATIC 
+              <div className="text-gray-300 md:text-sm text-[9px] lg:text-lg ">Price: {"  "}
+                <span className="text-white text-[7px] md:text-xs ">
+                  {data.pricePerToken.toString()}{" "}{data.currencySymbol}
                     {/* 10 MATIC */}
                     </span>
                 </div>    
-                 {data?.reserved && ( 
+                 {data.reserved && ( 
                   <div className="text-gray-300 text-[10px] md:text-base lg:text-2xl capitalize font-black">Reserved</div>
                  )}
               <div className="flex lg:space-x-3 space-x-1">
@@ -245,7 +255,7 @@ export default function ListingDetails({listingId}: ListingDetailsProps) {
              ⏰
              </div>
               <div className="text-gray-300 text-[7px] md:text-xs">
-                 {endTime}{" "}Days left 
+                 {endTime}
                 {/* 10 Days left */}
                 </div>
             </div>
@@ -278,10 +288,10 @@ export default function ListingDetails({listingId}: ListingDetailsProps) {
                 <div className="w-full h-full flex-col items-stretch">
                   <div className='w-full h-[25%] border-gray-400 border-b-2 md:text-sm text-[9px] lg:text-lg font-semibold'>Asset Contract:{' '}<span className='text-[7px] md:text-xs break-words'>
                     {/* 0x7A3d81bD8F80b61cF47927498Ee34CeCf81D944f  */}
-                    {data?.assetContract}
+                    {data.assetContract}
                     </span></div>
                   <div className='w-full h-[25%] border-gray-400 border-b-2 md:text-sm text-[9px] lg:text-lg font-semibold'>Asset Id:{' '}<span className='text-[7px] md:text-xs'>
-                     #{data?.tokenId.toString()} 
+                     #{data.tokenId.toString()} 
                     {/* #1 */}
                     </span> </div>
                   <div className='w-full h-[25%] border-gray-400 border-b-2 md:text-sm text-[9px] lg:text-lg font-semibold'>Asset Standard:{' '}<span className='text-[7px] md:text-xs'>
@@ -295,7 +305,7 @@ export default function ListingDetails({listingId}: ListingDetailsProps) {
              <div className="lg:w-[50%] w-full border-gray-400 border-2 h-[40vh] lg:h-[80%] rounded-lg break-words overflow-y-auto p-2">
                 <div className='w-full border-gray-400 border-b-2 capitalize text-center md:text-base text-sm lg:text-lg font-bold'>Description</div>
                 <div className="md:text-base text-xs">
-                {data?.nft?.metadata.description}
+                {data.nft?.metadata.description}
                 {/* dencnfddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddgdggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg  g ggggggggggg  */}
                 </div>
                 
@@ -306,6 +316,7 @@ export default function ListingDetails({listingId}: ListingDetailsProps) {
       </div>
     </div>
   );
+}
 };
 
 

@@ -13,6 +13,7 @@ import useCreateListingModal from '@/hooks/useCreateListingModal';
 import EmptyState from '../components/EmptyState';
 import Error from '../components/Error';
 import SkeletonCardContainer from "../components/card/CardSkeleton"
+import { fetchTokenInfo } from '@/hooks/useCurrencyInfo';
 
 export function getContractAddress(address: string) {
   return getContract({
@@ -42,6 +43,7 @@ export default function Listings() {
         try {
           const contract = getContractAddress(listing.assetContract);
           const nftDetails = await fetchNFT(contract, listing);
+           const currency = await fetchTokenInfo(listing.currency);
           
           if (!nftDetails?.metadata) {
             console.error(`Missing metadata for listing ${index}`);
@@ -57,6 +59,7 @@ export default function Listings() {
                 tokenId={`${listing.tokenId}`}
                 price={`${listing.pricePerToken}`}
                 listingId={listing.listingId}
+                symbol={currency.symbol}
               />
             
           );
@@ -64,7 +67,7 @@ export default function Listings() {
           console.error(`Error processing listing ${index}:`, error);
           return null;
         }
-      });
+      })
 
       const resolvedCards = await Promise.allSettled(nftCards);
       return resolvedCards
@@ -99,7 +102,7 @@ export default function Listings() {
     )
   }
 
-  if (fetchedListings?.length == 0) {
+  if (fetchedListings && fetchedListings.length == 0) {
     return (
       <EmptyState
         title='Oops!'
